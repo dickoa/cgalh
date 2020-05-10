@@ -8,6 +8,6 @@ pages:
     - Rscript -e 'remotes::install_gitlab("dickoa/cgalheaders")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
 
-    artifacts:
-      paths:
-        - public
+  artifacts:
+    paths:
+      - public
