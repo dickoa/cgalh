@@ -1,6 +1,17 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
+^\.gitlab-ci\.yml$
 ^cran-comments\.md$
 ^revdep$
 ^CRAN-RELEASE$
+^inst/include/CGAL/Algebraic_kernel_for_circles/*
+^inst/include/CGAL/Algebraic_kernel_for_spheres/*
+^inst/include/CGAL/Polygon_mesh_processing/*
+^inst/include/CGAL/NewKernel_d/*
+^inst/include/CGAL/Point_set_processing_3/*
+^inst/include/CGAL/Set_movable_separability_2/*
+^inst/include/CGAL/Shape_detection/*
+^inst/include/CGAL/Shape_detection/*
+^inst/include/CGAL/Surface_mesh_simplification/*
+^inst/include/CGAL/internal/Mesh_3/*

@@ -1,4 +1,4 @@
-Package: cgalheaders
+Package: cgalh
 Title: CGAL C++ Header Files
 Version: 0.0.0.9000
 Date: 2020-05-09
@@ -8,9 +8,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mail@ahmadoudicko.com")
 Description: CGAL is a C++ library that aims to provide easy access to efficient and reliable algorithms in computational geometry.
-License: GPL-3 | LGPL
-URL: https://gitlab.com/dickoa/cgal4headers
-BugReports: https://gitlab.com/dickoa/cgal4headers/issues
+License: GPL-3
+URL: https://gitlab.com/dickoa/cgalh
+BugReports: https://gitlab.com/dickoa/cgalh/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
