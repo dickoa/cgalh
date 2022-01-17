@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Filtered_kernel/include/CGAL/Filtered_kernel.h $
-// $Id: Filtered_kernel.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Filtered_kernel/include/CGAL/Filtered_kernel.h $
+// $Id: Filtered_kernel.h 5945e48 2021-09-17T08:14:06+02:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Sylvain Pion
 
@@ -23,9 +23,9 @@
 
 #include <CGAL/MP_Float.h>
 #include <CGAL/Quotient.h>
-#include <CGAL/internal/Exact_type_selector.h>
+#include <CGAL/Number_types/internal/Exact_type_selector.h>
 
-#include <CGAL/internal/Static_filters/Static_filters.h>
+#include <CGAL/Filtered_kernel/internal/Static_filters/Static_filters.h>
 #include <boost/type_traits.hpp>
 
 // This file contains the definition of a generic kernel filter.
@@ -112,14 +112,14 @@ template < typename CK, bool UseStaticFilters = true >
 struct Filtered_kernel_adaptor
   : public Filtered_kernel_base<CK>
 {
-	enum { Has_static_filters = false };
+        enum { Has_static_filters = false };
 };
 
 template < typename CK >
 struct Filtered_kernel_adaptor<CK, true>
   : public Static_filters_base<CK>
 {
-	enum { Has_static_filters = true };
+        enum { Has_static_filters = true };
 };
 
 // UseStaticFilters has a default value, depending on
@@ -130,7 +130,7 @@ struct Filtered_kernel
                Type_equality_wrapper<
                    typename CK:: template Base< Filtered_kernel<CK, UseStaticFilters> >::Type,
                    Filtered_kernel<CK, UseStaticFilters> >,
-	       UseStaticFilters >
+               UseStaticFilters >
 {};
 
 } //namespace CGAL

@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/internal/validity.h $
-// $Id: validity.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/internal/validity.h $
+// $Id: validity.h c47ba58 2021-11-19T13:42:11+01:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Mael Rouxel-Labbé
@@ -25,8 +25,9 @@
 #include <CGAL/intersections.h>
 #include <CGAL/Polygon_mesh_processing/connected_components.h>
 
-#include <boost/function_output_iterator.hpp>
-
+#include <boost/iterator/function_output_iterator.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/range/has_range_iterator.hpp>
 #include <vector>
 
 namespace CGAL {
@@ -113,7 +114,8 @@ class Intersect_facets
   typename Kernel::Construct_triangle_2 triangle_functor;
   typename Kernel::Do_intersect_2 do_intersect_2_functor;
 
-  typedef CGAL::Box_intersection_d::Box_with_info_d<NT, 2, face_descriptor> Box;
+  typedef CGAL::Box_intersection_d::ID_FROM_BOX_ADDRESS Box_policy;
+  typedef CGAL::Box_intersection_d::Box_with_info_d<NT, 2, face_descriptor, Box_policy> Box;
 
   const TriangleMesh& mesh;
   const VertexUVMap uvmap;
@@ -231,7 +233,7 @@ public:
   { }
 };
 
-/// Check if the 3D -> 2D mapping is one-to-one.
+/// returns whether the 3D -> 2D mapping is one-to-one.
 /// This function is stronger than "has_flips()" because the parameterized
 /// surface can loop over itself without creating any flips.
 template <typename TriangleMesh,
@@ -239,7 +241,10 @@ template <typename TriangleMesh,
           typename VertexUVMap>
 bool is_one_to_one_mapping(const TriangleMesh& mesh,
                            const Faces_Container& faces,
-                           const VertexUVMap uvmap)
+                           const VertexUVMap uvmap,
+                           typename boost::enable_if<
+                              boost::has_range_iterator<Faces_Container>
+                           >::type* = nullptr)
 {
   typedef typename boost::graph_traits<TriangleMesh>::vertex_descriptor    vertex_descriptor;
   typedef typename boost::graph_traits<TriangleMesh>::halfedge_descriptor  halfedge_descriptor;
@@ -250,7 +255,8 @@ bool is_one_to_one_mapping(const TriangleMesh& mesh,
   typedef typename Kernel::FT                                         NT;
   typedef typename Kernel::Point_2                                    Point_2;
 
-  typedef CGAL::Box_intersection_d::Box_with_info_d<NT, 2, face_descriptor> Box;
+  typedef CGAL::Box_intersection_d::ID_FROM_BOX_ADDRESS Box_policy;
+  typedef CGAL::Box_intersection_d::Box_with_info_d<NT, 2, face_descriptor, Box_policy> Box;
 
   // Create the corresponding vector of bounding boxes
   std::vector<Box> boxes;
@@ -283,8 +289,7 @@ bool is_one_to_one_mapping(const TriangleMesh& mesh,
   unsigned int counter = 0;
   Intersect_facets<TriangleMesh, VertexUVMap> intersect_facets(mesh, uvmap, counter);
   std::ptrdiff_t cutoff = 2000;
-  CGAL::box_self_intersection_d(boxes_ptr.begin(), boxes_ptr.end(),
-                                intersect_facets, cutoff);
+  CGAL::box_self_intersection_d(boxes_ptr.begin(), boxes_ptr.end(), intersect_facets, cutoff);
   return (counter == 0);
 }
 

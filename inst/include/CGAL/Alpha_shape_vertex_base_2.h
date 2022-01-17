@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Alpha_shapes_2/include/CGAL/Alpha_shape_vertex_base_2.h $
-// $Id: Alpha_shape_vertex_base_2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Alpha_shapes_2/include/CGAL/Alpha_shape_vertex_base_2.h $
+// $Id: Alpha_shape_vertex_base_2.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Tran Kai Frank DA <Frank.Da@sophia.inria.fr>
 
@@ -18,7 +18,7 @@
 
 #include <utility>
 #include <CGAL/Triangulation_vertex_base_2.h>
-#include <CGAL/internal/Lazy_alpha_nt_2.h>
+#include <CGAL/Alpha_shapes_2/internal/Lazy_alpha_nt_2.h>
 
 //-------------------------------------------------------------------
 namespace CGAL {
@@ -58,11 +58,11 @@ public:
   Alpha_shape_vertex_base_2()
     : Vb()
   {}
-  
+
   Alpha_shape_vertex_base_2(const Point & p)
     : Vb(p)
   {}
-  
+
   Alpha_shape_vertex_base_2(const Point & p, Face_handle f)
     : Vb(p, f)
   {}

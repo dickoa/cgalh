@@ -3,16 +3,16 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Circular_kernel_2/include/CGAL/IO/Dxf_reader.h $
-// $Id: Dxf_reader.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Circular_kernel_2/include/CGAL/IO/Dxf_reader.h $
+// $Id: Dxf_reader.h 4e519a3 2021-05-05T13:15:37+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Monique Teillaud, Sylvain Pion, Andreas Fabri
 
 // Partially supported by the IST Programme of the EU as a Shared-cost
-// RTD (FET Open) Project under Contract No  IST-2000-26473 
-// (ECG - Effective Computational Geometry for Curves and Surfaces) 
-// and a STREP (FET Open) Project under Contract No  IST-006413 
+// RTD (FET Open) Project under Contract No  IST-2000-26473
+// (ECG - Effective Computational Geometry for Curves and Surfaces)
+// and a STREP (FET Open) Project under Contract No  IST-006413
 // (ACS -- Algorithms for Complex Shapes)
 
 // Description of the file format can be found at the following address:
@@ -120,13 +120,13 @@ private:
 
   is >> n;
   CGAL_assertion(n == 10);
-  is >> iformat(cx);
+  is >> IO::iformat(cx);
   is >> n;
   CGAL_assertion(n == 20);
-  is >> iformat(cy);
+  is >> IO::iformat(cy);
   is >> n;
   CGAL_assertion(n == 40);
-  is >> iformat(r);
+  is >> IO::iformat(r);
   FT sqr_ft(r*r);
   circ = typename K::Construct_circle_2()(Point_2(cx,cy), sqr_ft);
 }
@@ -144,13 +144,13 @@ private:
 
   is >> n;
   CGAL_assertion(n == 10);
-  is >> iformat(cx);
+  is >> IO::iformat(cx);
   is >> n;
   CGAL_assertion(n == 20);
-  is >> iformat(cy);
+  is >> IO::iformat(cy);
   is >> n;
   CGAL_assertion(n == 40);
-  is >> iformat(r);
+  is >> IO::iformat(r);
 
   center = typename K::Construct_point_2()(cx,cy);
   rft = FT(r); // intentionally not squared
@@ -181,16 +181,16 @@ read_polygon(std::istream& is, Polygon& poly)
       CGAL_assertion(n == 0);
       is >> n;
       CGAL_assertion(n == 10);
-      is >> iformat(x);
+      is >> IO::iformat(x);
       is >> n;
       CGAL_assertion(n == 20);
-      is >> iformat(y);
+      is >> IO::iformat(y);
       is >> n;
       len = 0;
       if(n == 42){
-	is >> len;
+        is >> len;
       } else {
-	CGAL_assertion(n == 0);
+        CGAL_assertion(n == 0);
       }
       poly.push_back(std::make_pair(typename K::Construct_point_2()(x,y), len));
     }

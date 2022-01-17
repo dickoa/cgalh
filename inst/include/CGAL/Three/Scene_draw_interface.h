@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Three/include/CGAL/Three/Scene_draw_interface.h $
-// $Id: Scene_draw_interface.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Three/include/CGAL/Three/Scene_draw_interface.h $
+// $Id: Scene_draw_interface.h 1f45360 2021-01-26T09:05:24+01:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -16,6 +16,7 @@
 #include <CGAL/license/Three.h>
 
 #include <QPoint>
+#include <QVector3D>
 class QKeyEvent;
 class QPoint;
 namespace CGAL
@@ -35,7 +36,7 @@ public:
    */
   virtual void initializeGL(CGAL::Three::Viewer_interface*) = 0;
 
-  //! \brief Draws the items.
+  //! \brief draws the items.
   //! It is called by Viewer::draw().
   virtual void draw(CGAL::Three::Viewer_interface*) = 0;
   //!\brief draws the scene in a hidden frame to perform picking.
@@ -43,7 +44,7 @@ public:
   virtual void drawWithNames(CGAL::Three::Viewer_interface*) = 0;
   //!Pick the point `e` on the screen.
   virtual void setPickedPixel(const QPoint &e) = 0;
-  //! \brief Manages the key events.
+  //! \brief manages the key events.
   //! Override this function to perform actions when keys are pressed.
   //! @returns true if the keyEvent executed well.
   //!
@@ -62,16 +63,16 @@ public:
    * \return true if the TextItem is visible. */
   virtual bool  testDisplayId(double x, double y, double z, CGAL::Three::Viewer_interface* viewer) = 0;
 
-  ///\brief displays all the vertices ids if there are less than max_textItems.
+  ///\brief displays all the vertices ids if there are fewer than max_textItems.
   virtual void printVertexIds() = 0;
-  ///\brief displays all the edges ids if there are less than max_textItems.
+  ///\brief displays all the edges ids if there are fewer than max_textItems.
   virtual void printEdgeIds() = 0;
-  ///\brief displays all the faces ids if there are less than max_textItems.
+  ///\brief displays all the faces ids if there are fewer than max_textItems.
   virtual void printFaceIds() = 0;
-  ///\brief displays all the primitive ids if there are less than max_textItems.
+  ///\brief displays all the primitive ids if there are fewer than max_textItems.
   virtual void printAllIds() = 0;
 
-  //!\brief moves the camera orthogonally to the picked sface.
+  //!\brief moves the camera orthogonally to the picked face.
   //!
   //! \param point the picked point
   //! \param viewer the active viewer

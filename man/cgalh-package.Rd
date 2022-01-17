@@ -4,17 +4,9 @@
 \name{cgalh-package}
 \alias{cgalh}
 \alias{cgalh-package}
-\title{Provides CGAL 'C++' header-only library.}
+\title{Provides the 'C++' header-only library of CGAL}
 \description{
-CGAL is a C++ library that aims to provide easy access to efficient and reliable algorithms in computational geometry.
-}
-\examples{
-\dontrun{
-
-# Include a dependency to cgalh inside a cpp file
-// [[Rcpp::depends(cgalh)]]
-include <Rcpp.h>
-}
+'CGAL' is a C++ library that aims to provide easy access to efficient and reliable algorithms in computational geometry. Since its version 4, 'CGAL' can be used as standalone header-only library and is available under a double GPL-3|LGPL license. <https://www.cgal.org/>.
 }
 \seealso{
 Useful links:
@@ -22,9 +14,5 @@ Useful links:
   \item \url{https://gitlab.com/dickoa/cgalh}
   \item Report bugs at \url{https://gitlab.com/dickoa/cgalh/issues}
 }
-
-}
-\author{
-\strong{Maintainer}: Ahmadou Dicko \email{mail@ahmadoudicko.com}
 
 }

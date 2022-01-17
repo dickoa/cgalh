@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Triangulation/include/CGAL/Triangulation_full_cell.h $
-// $Id: Triangulation_full_cell.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Triangulation/include/CGAL/Triangulation_full_cell.h $
+// $Id: Triangulation_full_cell.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)    : Samuel Hornus
@@ -17,7 +17,7 @@
 #include <CGAL/disable_warnings.h>
 
 #include <CGAL/Triangulation_ds_full_cell.h>
-#include <CGAL/internal/Triangulation/utilities.h>
+#include <CGAL/Triangulation/internal/utilities.h>
 #include <CGAL/Iterator_project.h>
 #include <CGAL/Default.h>
 
@@ -42,7 +42,7 @@ public:
     typedef typename TriangulationTraits::Point_d       Point_d;
 
 private: // DATA MEMBERS
-    Data    data_;
+    CGAL_NO_UNIQUE_ADDRESS Data    data_;
 
 public:
 
@@ -55,7 +55,7 @@ public:
         typedef typename Base::template Rebind_TDS<TDS2>::Other TDSFullCell2;
         typedef Triangulation_full_cell<TriangulationTraits, Data_, TDSFullCell2> Other;
     };
- 
+
     Triangulation_full_cell(const int d)
         : Base(d), data_() {}
 
@@ -119,7 +119,7 @@ template < typename TDS, typename Data, typename SSP >
 std::ostream &
 operator<<(std::ostream & O, const Triangulation_full_cell<TDS, Data, SSP> & s)
 {
-    /*if( is_ascii(O) )
+    /*if( IO::is_ascii(O) )
     {
         // os << '\n';
     }
@@ -132,7 +132,7 @@ template < typename TDS, typename Data, typename SSP >
 std::istream &
 operator>>(std::istream & I, Triangulation_full_cell<TDS, Data, SSP> & s)
 {
-    /*if( is_ascii(I) )
+    /*if( IO::is_ascii(I) )
     {}
     else {}*/
     I >> s.data();

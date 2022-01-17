@@ -1,14 +1,14 @@
-// Copyright (c) 2002-2004,2007  
+// Copyright (c) 2002-2004,2007
 // Utrecht University (The Netherlands),
 // ETH Zurich (Switzerland),
 // INRIA Sophia-Antipolis (France),
 // Max-Planck-Institute Saarbruecken (Germany),
-// and Tel-Aviv University (Israel).  All rights reserved. 
+// and Tel-Aviv University (Israel).  All rights reserved.
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Number_types/include/CGAL/CORE_Expr.h $
-// $Id: CORE_Expr.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Number_types/include/CGAL/CORE_Expr.h $
+// $Id: CORE_Expr.h 152a084 2021-09-21T13:34:58+02:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -21,7 +21,6 @@
 
 #include <CGAL/number_type_basic.h>
 #include <CGAL/CORE_coercion_traits.h>
-#include <CGAL/CORE/Expr.h>
 #include <utility>
 
 
@@ -177,8 +176,7 @@ template <> class Real_embeddable_traits< CORE::Expr >
 } //namespace CGAL
 
 //since types are included by CORE_coercion_traits.h:
-#include <CGAL/CORE_Expr.h>
-#include <CGAL/CORE_BigInt.h> 
+#include <CGAL/CORE_BigInt.h>
 #include <CGAL/CORE_BigRat.h>
 #include <CGAL/CORE_BigFloat.h>
 #include <CGAL/CORE_arithmetic_kernel.h>

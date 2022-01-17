@@ -2,8 +2,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Solver_interface/include/CGAL/Diagonalize_traits.h $
-// $Id: Diagonalize_traits.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Solver_interface/include/CGAL/Diagonalize_traits.h $
+// $Id: Diagonalize_traits.h 267a641 2021-05-31T14:01:08+02:00 Dmitry Anisimov
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Simon Giraudot
@@ -29,7 +29,7 @@ lead to precision issues, please use CGAL::Eigen_diagonalize_traits")
 
 namespace CGAL {
 
-/// \ingroup PkgSolverInterfaceRef
+/// \ingroup PkgSolverInterfaceLS
 ///
 /// The class `Diagonalize_traits` provides an internal
 /// implementation for the diagonalization of Variance-Covariance
@@ -271,7 +271,7 @@ public:
 
       eigen_values[k] = eigen_values[i];
       eigen_values[i] = x;
-      
+
       int jj = index[k];
       index[k] = index[i];
       index[i] = jj;

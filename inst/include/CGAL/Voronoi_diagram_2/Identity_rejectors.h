@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Voronoi_diagram_2/include/CGAL/Voronoi_diagram_2/Identity_rejectors.h $
-// $Id: Identity_rejectors.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Voronoi_diagram_2/include/CGAL/Voronoi_diagram_2/Identity_rejectors.h $
+// $Id: Identity_rejectors.h 3816336 2021-04-29T23:24:40+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Menelaos Karavelas <mkaravel@iacm.forth.gr>
 
@@ -49,26 +49,16 @@ struct Identity_edge_rejector
   typedef typename Delaunay_graph::Finite_edges_iterator  Finite_edges_iterator;
 
   bool operator()(const Delaunay_graph& ,
-		  const Face_handle& , int ) const {
+                  const Face_handle& , int ) const {
     return false;
   }
 
-  bool operator()(const Delaunay_graph& , const Edge& ) const {
-    return false;
-  }
+  // handles Edge, All_edges_iterator, Finite_edges_iterator, Edge_circulator...
+  // use a single template in case some of these types (typically All_edges_iterator
+  // and Finite_edges_iterator) are equal
 
-  bool operator()(const Delaunay_graph& ,
-		  const All_edges_iterator& ) const {
-    return false;
-  }
-
-  bool operator()(const Delaunay_graph& ,
-		  const Finite_edges_iterator& ) const {
-    return false;
-  }
-
-  bool operator()(const Delaunay_graph& ,
-		  const Edge_circulator& ) const {
+  template <typename E>
+  bool operator()(const Delaunay_graph& , const E& ) const {
     return false;
   }
 };

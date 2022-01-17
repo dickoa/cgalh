@@ -3,17 +3,17 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Kernel_23/include/CGAL/Projection_traits_yz_3.h $
-// $Id: Projection_traits_yz_3.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Kernel_23/include/CGAL/Projection_traits_yz_3.h $
+// $Id: Projection_traits_yz_3.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Mariette Yvinec
 
 #ifndef CGAL_PROJECTION_TRAITS_YZ_3_H
 #define CGAL_PROJECTION_TRAITS_YZ_3_H
 
-#include <CGAL/internal/Projection_traits_3.h>
+#include <CGAL/Kernel_23/internal/Projection_traits_3.h>
 
 namespace CGAL {
 

@@ -1,14 +1,14 @@
-// Copyright (c) 1999,2007  
+// Copyright (c) 1999,2007
 // Utrecht University (The Netherlands),
 // ETH Zurich (Switzerland),
 // INRIA Sophia-Antipolis (France),
 // Max-Planck-Institute Saarbruecken (Germany),
-// and Tel-Aviv University (Israel).  All rights reserved. 
+// and Tel-Aviv University (Israel).  All rights reserved.
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Number_types/include/CGAL/leda_real.h $
-// $Id: leda_real.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Number_types/include/CGAL/leda_real.h $
+// $Id: leda_real.h 4e519a3 2021-05-05T13:15:37+02:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -197,8 +197,8 @@ public:
     Output_rep( const ::leda::real& tt) : t(tt) {}
     //! perform the output, calls \c operator\<\< by default.
     std::ostream& operator()( std::ostream& out) const {
-        if (t<0) out << "(" << ::CGAL::oformat(t)<<")";
-        else out << ::CGAL::oformat(t);
+        if (t<0) out << "(" << ::CGAL::IO::oformat(t)<<")";
+        else out << ::CGAL::IO::oformat(t);
         return out;
     }
 };

@@ -2,8 +2,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Polyhedron/include/CGAL/boost/graph/properties_Polyhedron_3.h $
-// $Id: properties_Polyhedron_3.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Polyhedron/include/CGAL/boost/graph/properties_Polyhedron_3.h $
+// $Id: properties_Polyhedron_3.h 8166579 2021-10-11T19:58:07+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -15,10 +15,10 @@
 #include <CGAL/boost/graph/properties.h>
 #include <CGAL/boost/graph/graph_traits_Polyhedron_3.h>
 #include <CGAL/Unique_hash_map.h>
-#include <CGAL/squared_distance_2_1.h>
 #include <CGAL/number_utils.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <CGAL/boost/graph/internal/Has_member_id.h>
+#include <CGAL/Distance_3/Point_3_Point_3.h>
 
 #define CGAL_HDS_PARAM_ template < class Traits, class Items, class Alloc> class HDS
 
@@ -46,18 +46,18 @@ public:
 
   reference operator[](const key_type& k) const { return (*map_)[k]; }
 private:
-   boost::shared_ptr<Map> map_;
+   std::shared_ptr<Map> map_;
 };
 
 // Special case for edges.
 template<class Polyhedron>
 class Polyhedron_edge_index_map_external
-  : public boost::put_get_helper<std::size_t, Polyhedron_edge_index_map_external<Polyhedron> >
+  : public boost::put_get_helper<std::size_t&, Polyhedron_edge_index_map_external<Polyhedron> >
 {
 public:
-  typedef boost::readable_property_map_tag                          category;
+  typedef boost::lvalue_property_map_tag                            category;
   typedef std::size_t                                               value_type;
-  typedef std::size_t                                               reference;
+  typedef std::size_t&                                              reference;
   typedef typename boost::graph_traits<Polyhedron>::edge_descriptor key_type;
 
 private:
@@ -75,12 +75,11 @@ public:
 
   reference operator[](const key_type& k) const { return (*map_)[k]; }
 private:
-  boost::shared_ptr<Map> map_;
+  std::shared_ptr<Map> map_;
 };
 
   template<typename Handle, typename FT>
 struct Wrap_squared
-    : boost::put_get_helper< double, Wrap_squared<Handle,FT> >
 {
   typedef FT value_type;
   typedef FT reference;
@@ -88,9 +87,15 @@ struct Wrap_squared
   typedef boost::readable_property_map_tag category;
 
   template<typename E>
-  FT
-  operator[](const E& e) const {
-    return approximate_sqrt(CGAL::squared_distance(e.halfedge()->vertex()->point(), e.halfedge()->opposite()->vertex()->point()));
+  FT operator[](const E& e) const {
+    return approximate_sqrt(CGAL::squared_distance(e.halfedge()->vertex()->point(),
+                                                   e.halfedge()->opposite()->vertex()->point()));
+  }
+
+  friend inline
+  value_type get(const Wrap_squared& m, const key_type k)
+  {
+    return m[k];
   }
 };
 
@@ -418,7 +423,7 @@ struct property_map<CGAL::Polyhedron_3<Gt,I,HDS,A>, CGAL::dynamic_edge_property_
   typedef CGAL::internal::Dynamic_property_map<edge_descriptor,T> type;
   typedef type const_type;
 };
-  
+
 template<class Gt, class I, CGAL_HDS_PARAM_, class A, class T>
 struct property_map<CGAL::Polyhedron_3<Gt,I,HDS,A>, CGAL::dynamic_face_property_t<T> >
 {
@@ -427,7 +432,7 @@ struct property_map<CGAL::Polyhedron_3<Gt,I,HDS,A>, CGAL::dynamic_face_property_
   typedef CGAL::internal::Dynamic_property_map<face_descriptor,T> type;
   typedef type const_type;
 };
-  
+
 // What are those needed for ???
 template<class Gt, class I, CGAL_HDS_PARAM_, class A>
 struct edge_property_type<CGAL::Polyhedron_3<Gt,I,HDS,A> >

@@ -7,12 +7,15 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/STL_Extension/include/CGAL/assertions_impl.h $
-// $Id: assertions_impl.h 01f69b5 2019-12-08T01:25:41-08:00 Fritz Mueller
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/STL_Extension/include/CGAL/assertions_impl.h $
+// $Id: assertions_impl.h bca05c8 2021-09-24T11:14:01+02:00 Jane Tournois
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
 // Author(s)     : Geert-Jan Giezeman and Sven Schönherr
+
+#ifndef CGAL_ASSERTIONS_IMPL_H
+#define CGAL_ASSERTIONS_IMPL_H
 
 #ifdef CGAL_HEADER_ONLY
 #define CGAL_INLINE_FUNCTION inline
@@ -86,7 +89,7 @@ _standard_error_handler(
          << "Line       : " << line << std::endl
          << "Explanation: " << msg << std::endl
          << "Refer to the bug-reporting instructions at https://www.cgal.org/bug_report.html"
-	 << std::endl;
+         << std::endl;
 }
 
 
@@ -111,7 +114,7 @@ _standard_warning_handler( const char *,
          << "Line       : " << line << std::endl
          << "Explanation: " << msg << std::endl
          << "Refer to the bug-reporting instructions at https://www.cgal.org/bug_report.html"
-	 << std::endl;
+         << std::endl;
 }
 
 } // anonymous namespace
@@ -280,3 +283,5 @@ set_warning_behaviour(Failure_behaviour eb)
 }
 
 } //namespace CGAL
+
+#endif //CGAL_ASSERTIONS_IMPL_H

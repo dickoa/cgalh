@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Cone_spanners_2/include/CGAL/Compute_cone_boundaries_2.h $
-// $Id: Compute_cone_boundaries_2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Cone_spanners_2/include/CGAL/Compute_cone_boundaries_2.h $
+// $Id: Compute_cone_boundaries_2.h 3ad2b0f 2021-11-25T15:43:21+01:00 albert-github
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -50,7 +50,7 @@ namespace CGAL {
  *  Of course, this functor can also be used in other applications where the plane needs to be divided
  *  into equally-angled cones.
  *
- * \tparam Traits_  Must be either `CGAL::Exact_predicates_exact_constructions_kernel_with_root_of` 
+ * \tparam Traits_  Must be either `CGAL::Exact_predicates_exact_constructions_kernel_with_root_of`
  *                  or `CGAL::Exact_predicates_inexact_constructions_kernel`.
  *
  */
@@ -80,7 +80,7 @@ public:
      * and output them to `result` in the counterclockwise order.
      * Finally, the past-the-end iterator for the resulting directions is returned.
      *
-         * \tparam DirectionOutputIterator  an `OutputIterator` with value type `Direction_2`.
+     * \tparam DirectionOutputIterator  an `OutputIterator` with value type `Direction_2`.
      * \param cone_number The number of cones
      * \param initial_direction The direction of the first ray
      * \param result  The output iterator

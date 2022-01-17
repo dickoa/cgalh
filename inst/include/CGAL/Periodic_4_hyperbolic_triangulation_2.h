@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Periodic_4_hyperbolic_triangulation_2/include/CGAL/Periodic_4_hyperbolic_triangulation_2.h $
-// $Id: Periodic_4_hyperbolic_triangulation_2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Periodic_4_hyperbolic_triangulation_2/include/CGAL/Periodic_4_hyperbolic_triangulation_2.h $
+// $Id: Periodic_4_hyperbolic_triangulation_2.h 26355e2 2020-06-25T12:31:21+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Iordan Iordanov  <Iordan.Iordanov@loria.fr>
@@ -608,15 +608,15 @@ protected:
     }
 
     // Now we know that all vertices lie in different regions.
-    Hyperbolic_translation min(7, 2, 5);
+    Hyperbolic_translation vmin(7, 2, 5);
     Hyperbolic_translation trans;
     for(int i=0; i<3; ++i)
     {
       int j = (i + 1) % 3; // the index of the 'next' vertex
       Hyperbolic_translation tmp = fh->translation(i).inverse() * fh->translation(j);
-      if(tmp < min)
+      if(tmp < vmin)
       {
-        min = tmp;
+        vmin = tmp;
         trans = fh->translation(i).inverse();
       }
     }
@@ -671,7 +671,7 @@ has_cycles_length_2(typename TDS::Vertex_handle v) const
   return false;
 }
 
-/*! \brief Tests if the triangulation is valid.
+/*! \brief tests if the triangulation is valid.
  *
  * A triangulation is valid if
  * - A cell is not its own neighbor.

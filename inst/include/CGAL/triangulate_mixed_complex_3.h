@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Skin_surface_3/include/CGAL/triangulate_mixed_complex_3.h $
-// $Id: triangulate_mixed_complex_3.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Skin_surface_3/include/CGAL/triangulate_mixed_complex_3.h $
+// $Id: triangulate_mixed_complex_3.h c8624ee 2021-09-09T11:01:03+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -363,23 +363,23 @@ construct_anchor_vor(Rt_Simplex const &sVor)
 //    it = find_anchor(anchor_vor2, it);
 //    typename Compute_anchor::Simplex_iterator degenerate_it;
 //    for (degenerate_it = compute_anchor_obj.equivalent_anchors_begin();
-//	 degenerate_it != compute_anchor_obj.equivalent_anchors_end();
-//	 degenerate_it++) {
+//         degenerate_it != compute_anchor_obj.equivalent_anchors_end();
+//         degenerate_it++) {
 //      Anchor_map_iterator tmp;
 //      it2 = anchor_vor2.find(*degenerate_it);
 //      // Possibly not found for 2 Voronoi vertices with the same center,
 //      // If the first vertex is inserted and the second is already found.
 //      // see compute_anchor_obj.anchor_vor(Cell_handle)
 //      if (it2 != anchor_vor2.end()) {
-//	CGAL_assertion(it2 != anchor_vor2.end());
-//	// Merge sets:
-//	while (it2 != it2->second) {
-//	  tmp = it2->second;
-//	  it2->second = it->second;
-//	  it2 = tmp;
-//	  CGAL_assertion(it2 != anchor_vor2.end());
-//	}
-//	it2->second = it->second;
+//        CGAL_assertion(it2 != anchor_vor2.end());
+//        // Merge sets:
+//        while (it2 != it2->second) {
+//          tmp = it2->second;
+//          it2->second = it->second;
+//          it2 = tmp;
+//          CGAL_assertion(it2 != anchor_vor2.end());
+//        }
+//        it2->second = it->second;
 //      }
 //    }
 //  }
@@ -1197,39 +1197,39 @@ Mixed_complex_triangulator_3<RegularTriangulation_3,
                              TriangulatedMixedComplexObserver_3>::
 orientation(Tmc_Cell_handle ch)
 {
-  Orientation o;
-  // Protection is outside the try block as VC8 has the CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
-  Protect_FPU_rounding<true> P;
-  try {
-  Tmc_Point pts[4];
-  for (int i=0; i<4; i++)
-    pts[i] = ch->vertex(i)->point();
+  {
+    // Protection is outside the try block as VC8 has the CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
+    Protect_FPU_rounding<true> P;
+    try {
+    Tmc_Point pts[4];
+    for (int i=0; i<4; i++)
+      pts[i] = ch->vertex(i)->point();
 
-  // filtered kernel
-  o = _tmc.geom_traits().orientation_3_object()(pts[0], pts[1], pts[2], pts[3]);
-  } catch (Uncertain_conversion_exception&) {
-    Protect_FPU_rounding<false> P(CGAL_FE_TONEAREST);
-    typedef Exact_predicates_exact_constructions_kernel EK;
-    typedef Cartesian_converter<EK, Tmc_traits>         Exact_converter;
-    typedef Skin_surface_traits_3<EK>                   Exact_traits;
-    typedef Skin_surface_base_3<EK>                     Exact_skin_surface;
-
-    Exact_converter converter;
-    Exact_traits    exact_traits(shrink);
-    typename Exact_skin_surface::Bare_point e_pts[4];
-
-    for (int k=0; k<4; k++) {
-       e_pts[k] =
-         Triangulated_mixed_complex_observer::Skin_surface::
-           get_anchor_point(ch->vertex(k)->info(), exact_traits);
-
-      // Store the more precise point
-      ch->vertex(k)->point() = converter(e_pts[k]);
-    }
-    o = exact_traits.orientation_3_object()(e_pts[0], e_pts[1],
-                                            e_pts[2], e_pts[3]);
+    // filtered kernel
+    return _tmc.geom_traits().orientation_3_object()(pts[0], pts[1], pts[2], pts[3]);
+    } catch (Uncertain_conversion_exception&) {}
   }
-  return o;
+  Protect_FPU_rounding<false> P(CGAL_FE_TONEAREST);
+  CGAL_expensive_assertion(FPU_get_cw() == CGAL_FE_TONEAREST);
+  typedef Exact_predicates_exact_constructions_kernel EK;
+  typedef Cartesian_converter<EK, Tmc_traits>         Exact_converter;
+  typedef Skin_surface_traits_3<EK>                   Exact_traits;
+  typedef Skin_surface_base_3<EK>                     Exact_skin_surface;
+
+  Exact_converter converter;
+  Exact_traits    exact_traits(shrink);
+  typename Exact_skin_surface::Bare_point e_pts[4];
+
+  for (int k=0; k<4; k++) {
+     e_pts[k] =
+       Triangulated_mixed_complex_observer::Skin_surface::
+         get_anchor_point(ch->vertex(k)->info(), exact_traits);
+
+    // Store the more precise point
+    ch->vertex(k)->point() = converter(e_pts[k]);
+  }
+  return exact_traits.orientation_3_object()(e_pts[0], e_pts[1],
+                                          e_pts[2], e_pts[3]);
 }
 
 template <class RegularTriangulation_3,

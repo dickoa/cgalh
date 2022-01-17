@@ -1,12 +1,12 @@
-// Copyright (c) 1997-2001  
+// Copyright (c) 1997-2001
 // ETH Zurich (Switzerland).  All rights reserved.
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Bounding_volumes/include/CGAL/Min_circle_2/Min_circle_2_adapterC2.h $
-// $Id: Min_circle_2_adapterC2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Bounding_volumes/include/CGAL/Min_circle_2/Min_circle_2_adapterC2.h $
+// $Id: Min_circle_2_adapterC2.h 78ff918 2021-06-23T23:34:14+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Sven Schoenherr <sven@inf.ethz.ch>, Bernd Gaertner
 
@@ -61,18 +61,18 @@ class Min_circle_2_adapterC2 {
     orientation( const Point& p, const Point& q, const Point& r) const
     {
         typedef  typename DA_::FT  FT;
-    
+
         FT  px;
         FT  py;
         FT  qx;
         FT  qy;
         FT  rx;
         FT  ry;
-    
+
         dao.get( p, px, py);
         dao.get( q, qx, qy);
         dao.get( r, rx, ry);
-    
+
         return( static_cast< CGAL::Orientation>(
                   CGAL_NTS sign( ( px-rx) * ( qy-ry) - ( py-ry) * ( qx-rx))));
     }
@@ -273,7 +273,7 @@ std::ostream&
 operator << ( std::ostream& os,
               const CGAL::_Min_circle_2_adapterC2__Circle<PT_,DA_>& c)
 {
-    switch ( CGAL::get_mode( os)) {
+    switch ( CGAL::IO::get_mode( os)) {
 
       case CGAL::IO::PRETTY:
         os << "CGAL::Min_circle_2_adapterC2::Circle( "
@@ -294,7 +294,7 @@ operator << ( std::ostream& os,
 
       default:
         CGAL_optimisation_assertion_msg( false,
-                                         "CGAL::get_mode( os) invalid!");
+                                         "CGAL::IO::get_mode( os) invalid!");
         break; }
 
     return( os);
@@ -305,11 +305,11 @@ std::istream&
 operator >> ( std::istream& is,
               CGAL::_Min_circle_2_adapterC2__Circle<PT_,DA_>& c)
 {
-    switch ( CGAL::get_mode( is)) {
+    switch ( CGAL::IO::get_mode( is)) {
 
       case CGAL::IO::PRETTY:
-	std::cerr << std::endl;
-	std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        std::cerr << std::endl;
+        std::cerr << "Stream must be in ASCII or binary mode" << std::endl;
         break;
 
       case CGAL::IO::ASCII:

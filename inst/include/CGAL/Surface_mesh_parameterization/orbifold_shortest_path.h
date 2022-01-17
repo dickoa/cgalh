@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/orbifold_shortest_path.h $
-// $Id: orbifold_shortest_path.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/orbifold_shortest_path.h $
+// $Id: orbifold_shortest_path.h 752c07e 2021-06-04T11:23:16+02:00 Dmitry Anisimov
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Mael Rouxel-Labbé
@@ -103,7 +103,7 @@ public:
 
 /// \ingroup PkgSurfaceMeshParameterizationOrbifoldHelperFunctions
 ///
-/// Compute the shortest path between `source` and `target` over `mesh`, using
+/// computes the shortest path between `source` and `target` over `mesh`, using
 /// <a href="https://www.boost.org/doc/libs/release/libs/graph/doc/dijkstra_shortest_paths.html">
 /// boost::dijkstra_shortest_paths()</a>.
 ///
@@ -190,8 +190,8 @@ void compute_shortest_paths_between_cones(const TriangleMesh& mesh,
     compute_shortest_paths_between_two_cones(mesh, *first, *next, std::back_inserter(seams));
   }
 
-  std::ofstream out("shortest_path.selection.txt");
 #ifdef CGAL_SMP_ORBIFOLD_DEBUG
+  std::ofstream out("shortest_path.selection.txt");
   internal::output_shortest_paths_to_selection_file(mesh, seams, out);
 #endif
 }

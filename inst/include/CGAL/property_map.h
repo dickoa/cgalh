@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Property_map/include/CGAL/property_map.h $
-// $Id: property_map.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Property_map/include/CGAL/property_map.h $
+// $Id: property_map.h 833e511 2021-11-10T11:31:42+01:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Andreas Fabri and Laurent Saboret
@@ -15,53 +15,49 @@
 #include <CGAL/value_type_traits.h>
 
 #include <boost/version.hpp>
-#if BOOST_VERSION >= 104000
-  #include <boost/property_map/property_map.hpp>
-#else
-  #include <boost/property_map.hpp>
-  #include <boost/vector_property_map.hpp>
-
-#endif
+#include <boost/property_map/property_map.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <CGAL/tuple.h>
 
-#include <utility> // defines std::pair
-
+#include <CGAL/boost/iterator/counting_iterator.hpp>
+#include <CGAL/boost/iterator/transform_iterator.hpp>
+#include <CGAL/Iterator_range.h>
 #include <CGAL/Cartesian_converter_fwd.h>
 #include <CGAL/Kernel_traits_fwd.h>
 #include <CGAL/assertions.h>
+
+#include <algorithm>
+#include <iterator>
+#include <tuple>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 namespace CGAL {
 
 /// \cond SKIP_DOXYGEN
 
-/// This class is almost the same as boost::static_property_map
-/// The difference is that it is writable, although put() does nothing
-template <typename K, typename V>
-class Static_property_map
+/// A boolean property map return a const value at compile time
+template <typename Key, bool default_value>
+class Static_boolean_property_map
 {
 public:
-  typedef K key_type;
-  typedef V value_type;
-  typedef const V& reference;
+  typedef Key key_type;
+  typedef bool value_type;
+  typedef bool reference;
   typedef boost::read_write_property_map_tag category;
 
-private:
-  V v;
-
 public:
-  Static_property_map(V pv)
-    :v(pv){}
   inline friend
   value_type
-  get(const Static_property_map& pm, const key_type&)
+  get(Static_boolean_property_map, const key_type&)
   {
-    return pm.v;
+    return default_value;
   }
 
   inline friend
   void
-  put(Static_property_map&, const key_type&, const value_type&)
+  put(Static_boolean_property_map, const key_type&, value_type)
   {}
 };
 
@@ -84,14 +80,14 @@ class OR_property_map {
   {}
 
   inline friend
-    value_type
-    get(const OR_property_map& pm, const key_type& k)
+  value_type
+  get(const OR_property_map& pm, const key_type& k)
   {
     return get(pm.pm1,k) || get(pm.pm2,k);
   }
 
   inline friend
-    void
+  void
   put(OR_property_map& pm, const key_type& k, const value_type& v)
   {
     put(pm.pm1,k, v);
@@ -108,7 +104,8 @@ make_OR_property_map(const PM1& pm1, const PM2& pm2)
 
 // A property map that uses the result of a property map as key.
 template <class KeyMap, class ValueMap>
-struct Property_map_binder{
+struct Property_map_binder
+{
   typedef typename boost::property_traits<KeyMap>::key_type key_type;
   typedef typename boost::property_traits<ValueMap>::value_type value_type;
   typedef typename boost::property_traits<ValueMap>::reference reference;
@@ -117,10 +114,16 @@ struct Property_map_binder{
   KeyMap key_map;
   ValueMap value_map;
 
-  Property_map_binder(const KeyMap& key_map, const ValueMap& value_map)
-    : key_map(key_map)
-    , value_map(value_map)
-  {}
+  Property_map_binder(const KeyMap& key_map = KeyMap(),
+                      const ValueMap& value_map = ValueMap())
+    : key_map(key_map), value_map(value_map)
+  { }
+
+  template <typename VM>
+  Property_map_binder(const VM& value_map,
+                      typename std::enable_if<!std::is_same<KeyMap, VM>::value>::type* = nullptr)
+    : value_map(value_map)
+  { }
 
   friend
   reference get(const Property_map_binder& map, key_type k)
@@ -172,19 +175,19 @@ struct Dereference_property_map
 {
   typedef T* key_type; ///< typedef to 'T*'
   typedef T value_type; ///< typedef to 'T'
-  typedef const value_type& reference; ///< typedef to 'T&'
+  typedef T& reference; ///< typedef to 'T&'
   typedef boost::lvalue_property_map_tag category; ///< `boost::lvalue_property_map_tag`
 
   /// Access a property map element.
   ///
   /// @tparam Iter Type convertible to `key_type`.
   template <class Iter>
-  value_type& operator[](Iter it) const { return reference(*it); }
+  value_type& operator[](Iter it) const { return *it; }
 };
 
 /// Free function to create a `Dereference_property_map` property map.
 ///
-/// \relates Dereference_property_map 
+/// \relates Dereference_property_map
 template <class Iter> // Type convertible to `key_type`
 Dereference_property_map<typename CGAL::value_type_traits<Iter>::type>
 make_dereference_property_map(Iter)
@@ -195,30 +198,60 @@ make_dereference_property_map(Iter)
 
 /// \ingroup PkgPropertyMapRef
 /// A `LvaluePropertyMap` property map mapping a key to itself (by reference).
+/// It is mutable if `T` is not `const` and non-mutable otherwise.
 ///
 /// \cgalModels `LvaluePropertyMap`
 template <typename T>
 struct Identity_property_map
 {
-  typedef T key_type; ///< typedef to `T`
-  typedef T value_type; ///< typedef to `T`
-  typedef const T& reference; ///< typedef to `T&`
-  typedef boost::lvalue_property_map_tag category; ///< `boost::lvalue_property_map_tag`
-  /// Access a property map element.
-  /// @param k a key which is returned as mapped value.
+/// \cond SKIP_IN_MANUAL
+  typedef Identity_property_map<T> Self;
+
+  typedef T key_type;
+  typedef T value_type;
+  typedef T& reference;
+  typedef boost::lvalue_property_map_tag category;
+
   value_type& operator[](key_type& k) const { return k; }
 
-  typedef Identity_property_map<T> Self;
-  /// \name Put/get free functions
-  /// @{
-  friend reference get(const Self&,const key_type& k) {return k;}
-  friend void put(const Self&,key_type& k, const value_type& v) {k=v;}
-  /// @}
+  friend value_type& get(const Self&, key_type& k) { return k; }
+  friend const value_type& get(const Self&, const key_type& k) { return k; }
+  friend void put(const Self&, key_type& k, const value_type& v) { k = v; }
+/// \endcond
 };
+
+/// \cond SKIP_IN_MANUAL
+template <typename T>
+struct Identity_property_map<const T>
+{
+  typedef Identity_property_map<const T> Self;
+
+  typedef T key_type;
+  typedef T value_type;
+  typedef const T& reference;
+  typedef boost::lvalue_property_map_tag category;
+
+  const value_type& operator[](key_type& k) const { return k; }
+  friend const value_type& get(const Self&, const key_type& k) { return k; }
+};
+
+template <typename T>
+struct Identity_property_map_no_lvalue
+{
+  typedef T key_type; ///< typedef to `T`
+  typedef T value_type; ///< typedef to `T`
+  typedef T reference; ///< typedef to `T`
+  typedef boost::readable_property_map_tag category; ///< `boost::readable_property_map_tag`
+
+  typedef Identity_property_map_no_lvalue<T> Self;
+
+  friend value_type get(const Self&, const key_type& k) {return k;}
+};
+/// \endcond
 
 /// Free function to create a `Identity_property_map` property map.
 ///
-/// \relates Identity_property_map 
+/// \relates Identity_property_map
 template <class T> // Key and value type
 Identity_property_map<T>
   make_identity_property_map(T)
@@ -228,34 +261,35 @@ Identity_property_map<T>
 
 
 /// \ingroup PkgPropertyMapRef
-/// Property map that accesses the first item of a `std::pair`. 
-/// \tparam Pair Instance of `std::pair`. 
+/// Property map that accesses the first item of a `std::pair`.
+/// \tparam Pair Instance of `std::pair`.
 /// \cgalModels `LvaluePropertyMap`
 ///
 /// \sa `CGAL::Second_of_pair_property_map<Pair>`
 template <typename Pair>
 struct First_of_pair_property_map
 {
+  typedef First_of_pair_property_map<Pair> Self;
+
   typedef Pair key_type; ///< typedef to `Pair`
   typedef typename Pair::first_type value_type; ///< typedef to `Pair::first_type`
-  typedef const value_type& reference; ///< typedef to `value_type&`
+  typedef const value_type& reference; ///< typedef to `const value_type&`
   typedef boost::lvalue_property_map_tag category; ///< boost::lvalue_property_map_tag
 
   /// Access a property map element.
   /// @param pair a key whose first item is accessed
-  value_type& operator[](key_type& pair) const { return pair.first; }
+  const value_type& operator[](const key_type& pair) const { return pair.first; }
 
-  typedef First_of_pair_property_map<Pair> Self;
   /// \name Put/get free functions
   /// @{
-  friend reference get(const Self&,const key_type& k) {return k.first;}
-  friend void put(const Self&,key_type& k, const value_type& v) {k.first=v;}
+  friend reference get(const Self&, const key_type& k) { return k.first; }
+  friend void put(const Self&, key_type& k, const value_type& v) { k.first = v; }
   /// @}
 };
 
-/// Free function to create a `First_of_pair_property_map` property map. 
+/// Free function to create a `First_of_pair_property_map` property map.
 ///
-/// \relates First_of_pair_property_map 
+/// \relates First_of_pair_property_map
 template <class Pair> // Pair type
 First_of_pair_property_map<Pair>
   make_first_of_pair_property_map(Pair)
@@ -264,37 +298,38 @@ First_of_pair_property_map<Pair>
 }
 
 /// \ingroup PkgPropertyMapRef
-/// 
-/// Property map that accesses the second item of a `std::pair`. 
-/// 
-/// \tparam Pair Instance of `std::pair`. 
-/// 
+///
+/// Property map that accesses the second item of a `std::pair`.
+///
+/// \tparam Pair Instance of `std::pair`.
+///
 /// \cgalModels `LvaluePropertyMap`
-/// 
+///
 /// \sa `CGAL::First_of_pair_property_map<Pair>`
 template <typename Pair>
 struct Second_of_pair_property_map
 {
+  typedef Second_of_pair_property_map<Pair> Self;
+
   typedef Pair key_type; ///< typedef to `Pair`
   typedef typename Pair::second_type value_type; ///< typedef to `Pair::second_type`
-  typedef const value_type& reference; ///< typedef to `value_type&`
+  typedef const value_type& reference; ///< typedef to `const value_type&`
   typedef boost::lvalue_property_map_tag category; ///< boost::lvalue_property_map_tag
 
   /// Access a property map element.
   /// @param pair a key whose second item is accessed
-  value_type& operator[](key_type& pair) const { return pair.second; }
+  const value_type& operator[](const key_type& pair) const { return pair.second; }
 
-  typedef Second_of_pair_property_map<Pair> Self;
   /// \name Put/get free functions
   /// @{
-  friend reference get(const Self&,const key_type& k) {return k.second;}
-  friend void put(const Self&,key_type& k, const value_type& v) {k.second=v;}
+  friend reference get(const Self&, const key_type& k) { return k.second; }
+  friend void put(const Self&, key_type& k, const value_type& v) { k.second = v; }
   /// @}
 };
 
 /// Free function to create a Second_of_pair_property_map property map.
 ///
-/// \relates Second_of_pair_property_map 
+/// \relates Second_of_pair_property_map
 template <class Pair> // Pair type
 Second_of_pair_property_map<Pair>
   make_second_of_pair_property_map(Pair)
@@ -303,33 +338,35 @@ Second_of_pair_property_map<Pair>
 }
 
 /// \ingroup PkgPropertyMapRef
-/// 
+///
 /// Property map that accesses the Nth item of a `boost::tuple` or a `std::tuple`.
-/// 
+///
 /// \tparam N %Index of the item to access.
 /// \tparam Tuple Instance of `boost::tuple` or `std::tuple`.
-/// 
+///
 /// \cgalModels `LvaluePropertyMap`
 template <int N, typename Tuple>
 struct Nth_of_tuple_property_map
 {
+  typedef Nth_of_tuple_property_map<N,Tuple> Self;
+
   typedef Tuple key_type; ///< typedef to `Tuple`
-  #ifdef DOXYGEN_RUNNING
+#ifdef DOXYGEN_RUNNING
   typedef unspecified_type value_type;  ///< typedef to the N-th type of the tuple
-  #else
+#else
   typedef typename boost::tuples::element<N,Tuple>::type value_type;
-  #endif
-  typedef const value_type& reference; ///< typedef to `value_type&`
+#endif
+  typedef const value_type& reference; ///< typedef to `const value_type&`
   typedef boost::lvalue_property_map_tag category; ///< `boost::lvalue_property_map_tag`
+
   /// Access a property map element.
   /// @param tuple a key whose Nth item is accessed
-  value_type& operator[](key_type& tuple) const { return tuple.template get<N>(); }
+  const value_type& operator[](const key_type& tuple) const { return tuple.template get<N>(); }
 
-  typedef Nth_of_tuple_property_map<N,Tuple> Self;
   /// \name Put/get free functions
   /// @{
-  friend reference get(const Self&,const key_type& k) {return k.template get<N>();}
-  friend void put(const Self&,key_type& k, const value_type& v) {k.template get<N>()=v;}
+  friend reference get(const Self&, const key_type& k) { return k.template get<N>(); }
+  friend void put(const Self&, key_type& k, const value_type& v) { k.template get<N>() = v; }
   /// @}
 };
 
@@ -337,16 +374,17 @@ template <int N, typename ... T>
 struct Nth_of_tuple_property_map<N,std::tuple<T...> >
 {
   typedef std::tuple<T...> Tuple;
+  typedef Nth_of_tuple_property_map<N,Tuple> Self;
+
   typedef Tuple key_type;
   typedef typename std::tuple_element<N,Tuple>::type value_type;
   typedef const value_type& reference;
   typedef boost::lvalue_property_map_tag category;
 
-  value_type& operator[](key_type& tuple) const { return get<N>(tuple); }
+  const value_type& operator[](const key_type& tuple) const { return get<N>(tuple); }
 
-  typedef Nth_of_tuple_property_map<N,Tuple> Self;
-  friend reference get(const Self&,const key_type& k) {return std::get<N>(k);}
-  friend void put(const Self&,key_type& k, const value_type& v) {std::get<N>(k)=v;}
+  friend reference get(const Self&, const key_type& k) { return std::get<N>(k); }
+  friend void put(const Self&, key_type& k, const value_type& v) { std::get<N>(k) = v; }
 };
 
 /// Free function to create a Nth_of_tuple_property_map property map.
@@ -373,7 +411,7 @@ struct Property_map_to_unary_function{
   {}
 
   template <class KeyType>
-  result_type
+  decltype(auto)
   operator()(const KeyType& a) const
   {
     return get(map,a);
@@ -455,18 +493,18 @@ struct Constant_property_map
 
   typedef KeyType                                       key_type;
   typedef ValueType                                     value_type;
-  typedef value_type&                                   reference;
+  typedef const value_type&                             reference;
   typedef boost::read_write_property_map_tag            category;
 
   Constant_property_map(const value_type& default_value = value_type()) : default_value (default_value) { }
 
   /// Free function that returns `pm.default_value`.
-  inline friend value_type
-  get (const Constant_property_map& pm, const key_type&){ return pm.default_value; }
+  inline friend
+  reference get (const Constant_property_map& pm, const key_type&) { return pm.default_value; }
 
   /// Free function that does nothing.
-  inline friend void
-  put (const Constant_property_map&, const key_type&, const value_type&) { }
+  inline friend
+  void put (const Constant_property_map&, const key_type&, const value_type&) { }
 };
 
 /// \ingroup PkgPropertyMapRef
@@ -541,8 +579,7 @@ struct Cartesian_converter_property_map
 
   friend value_type get(const Cartesian_converter_property_map<GeomObject, Vpm>& pm, const key_type& k)
   {
-    return
-     CGAL::Cartesian_converter<K1, K2>()(get(pm.vpm, k));
+    return CGAL::Cartesian_converter<K1, K2>()(get(pm.vpm, k));
   }
 
   friend void put(Cartesian_converter_property_map<GeomObject, Vpm>& pm, const key_type& k, const value_type& v)
@@ -559,6 +596,85 @@ make_cartesian_converter_property_map(Vpm vpm)
 {
   return Cartesian_converter_property_map<GeomObject, Vpm>(vpm);
 }
+
+/// \cond SKIP_IN_MANUAL
+// Syntaxic sugar for transform_iterator+pmap_to_unary_function
+template <typename Iterator, typename Pmap>
+typename boost::transform_iterator<CGAL::Property_map_to_unary_function<Pmap>, Iterator>
+make_transform_iterator_from_property_map (Iterator it, Pmap pmap)
+{
+  return boost::make_transform_iterator (it, CGAL::Property_map_to_unary_function<Pmap>(pmap));
+}
+
+// Syntaxic sugar for make_range+transform_iterator+pmap_to_unary_function
+template <typename Range, typename Pmap>
+CGAL::Iterator_range<typename boost::transform_iterator<CGAL::Property_map_to_unary_function<Pmap>,
+                                                        typename Range::const_iterator> >
+make_transform_range_from_property_map (const Range& range, Pmap pmap)
+{
+  return CGAL::make_range
+    (make_transform_iterator_from_property_map (range.begin(), pmap),
+     make_transform_iterator_from_property_map (range.end(), pmap));
+}
+
+// Syntaxic sugar for make_range+transform_iterator+pmap_to_unary_function
+template <typename Range, typename Pmap>
+CGAL::Iterator_range<typename boost::transform_iterator<CGAL::Property_map_to_unary_function<Pmap>,
+                                                        typename Range::iterator> >
+make_transform_range_from_property_map (Range& range, Pmap pmap)
+{
+  return CGAL::make_range
+    (make_transform_iterator_from_property_map (range.begin(), pmap),
+     make_transform_iterator_from_property_map (range.end(), pmap));
+}
+
+template <typename SizeType>
+CGAL::Iterator_range<boost::counting_iterator<SizeType> >
+make_counting_range (const SizeType begin, const SizeType end)
+{
+  return CGAL::make_range (boost::counting_iterator<SizeType>(begin),
+                           boost::counting_iterator<SizeType>(end));
+}
+
+/// \endcond
+
+/// \cond SKIP_IN_MANUAL
+/*
+  This property map is used to turn a property map using the value
+  type of a random access iterator as key type to the same property
+  map but using the index of the element iterated to.
+
+  It basically allows, when accessing the ith element of a range, to
+  do `get(map, i)` instead of `get(map, range[i])`.
+ */
+template<typename RandomAccessIterator, typename PropertyMap>
+struct Random_index_access_property_map
+{
+  typedef std::size_t key_type;
+  typedef typename boost::property_traits<PropertyMap>::value_type value_type;
+  typedef typename boost::property_traits<PropertyMap>::reference reference;
+  typedef typename boost::property_traits<PropertyMap>::category category;
+
+  RandomAccessIterator m_begin;
+  PropertyMap m_map;
+
+  Random_index_access_property_map (RandomAccessIterator begin = RandomAccessIterator(),
+                                    PropertyMap map = PropertyMap())
+    : m_begin(begin), m_map(map) {}
+
+  friend reference get (const Random_index_access_property_map& map, const key_type& index,
+                        typename std::enable_if<std::is_convertible<category, boost::readable_property_map_tag>::value>::type* = 0)
+  {
+    return get(map.m_map, *std::next(map.m_begin, index));
+  }
+
+  friend void put (Random_index_access_property_map& map, const key_type& index, const value_type& value,
+                   typename std::enable_if<std::is_convertible<category, boost::writable_property_map_tag>::value>::type* = 0)
+  {
+    put (map.m_map, *std::next(map.m_begin, index), value);
+  }
+};
+/// \endcond
 
 } // namespace CGAL
 

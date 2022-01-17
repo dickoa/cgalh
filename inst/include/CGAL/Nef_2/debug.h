@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Nef_2/include/CGAL/Nef_2/debug.h $
-// $Id: debug.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Nef_2/include/CGAL/Nef_2/debug.h $
+// $Id: debug.h ce7d06d 2020-12-05T08:12:56+00:00 Giles Bathgate
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Michael Seel <seel@mpi-sb.mpg.de>
 
@@ -16,15 +16,14 @@
 #include <iostream>
 
 #ifdef NDEBUG
-#undef CGAL_NEF_DEBUG
-#define CGAL_NEF_DEBUG 1
+#undef CGAL_USE_TRACE
 #endif
 
 #ifndef CGAL_NEF_DEBUG
 #define CGAL_NEF_DEBUG 1
 #endif
 
-#ifndef NDEBUG
+#ifdef CGAL_USE_TRACE
   static int debugthread=1;
 #endif
 
@@ -35,46 +34,43 @@
 #undef CGAL_NEF_CTRACEN
 #undef CGAL_NEF_SETDTHREAD
 
-#ifndef NDEBUG
+#ifdef CGAL_USE_TRACE
 #define CGAL_NEF_SETDTHREAD(l) debugthread=l
 #else
 #define CGAL_NEF_SETDTHREAD(l)
 #endif
 
-#ifndef NDEBUG
+#ifdef CGAL_USE_TRACE
 #define CGAL_NEF_TRACE(t) if((debugthread%CGAL_NEF_DEBUG)==0) \
- std::cerr<<" "<<t; \
- std::cerr.flush()
+    { std::cerr<<" "<<t; }
 #else
-#define CGAL_NEF_TRACE(t) 
+#define CGAL_NEF_TRACE(t) (static_cast<void>(0))
 #endif
 
-#ifndef NDEBUG
+#ifdef CGAL_USE_TRACE
 #define CGAL_NEF_TRACEV(t) if((debugthread%CGAL_NEF_DEBUG)==0) \
- std::cerr<<" "<<#t<<" = "<<(t)<<std::endl; \
- std::cerr.flush()
+    { std::cerr<<" "<<#t<<" = "<<(t)<<std::endl; }
 #else
-#define CGAL_NEF_TRACEV(t) 
+#define CGAL_NEF_TRACEV(t) (static_cast<void>(0))
 #endif
 
-#ifndef NDEBUG
+#ifdef CGAL_USE_TRACE
 #define CGAL_NEF_TRACEN(t) if((debugthread%CGAL_NEF_DEBUG)==0) \
- std::cerr<< " "<<t<<std::endl; \
- std::cerr.flush()
+    { std::cerr<< " "<<t<<std::endl; }
 #else
-#define CGAL_NEF_TRACEN(t)
+#define CGAL_NEF_TRACEN(t) (static_cast<void>(0))
 #endif
 
-#ifndef NDEBUG
-#define CGAL_NEF_CTRACE(b,t) if(b) std::cerr<<" "<<t; else std::cerr<<" 0"
+#ifdef CGAL_USE_TRACE
+#define CGAL_NEF_CTRACE(b,t) if(b) {std::cerr<<" "<<t;} else {std::cerr<<" 0"}
 #else
-#define CGAL_NEF_CTRACE(b,t) 
+#define CGAL_NEF_CTRACE(b,t) (static_cast<void>(0))
 #endif
 
-#ifndef NDEBUG
-#define CGAL_NEF_CTRACEN(b,t) if(b) std::cerr<<" "<<t<<"\n"; else std::cerr<<" 0\n"
+#ifdef CGAL_USE_TRACE
+#define CGAL_NEF_CTRACEN(b,t) if(b){ std::cerr<<" "<<t<<"\n";} else {std::cerr<<" 0\n"}
 #else
-#define CGAL_NEF_CTRACEN(b,t) 
+#define CGAL_NEF_CTRACEN(b,t) (static_cast<void>(0))
 #endif
 
 #endif // CGAL_NEF_2_DEBUG_H

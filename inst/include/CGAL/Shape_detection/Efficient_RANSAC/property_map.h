@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Shape_detection/include/CGAL/Shape_detection/Efficient_RANSAC/property_map.h $
-// $Id: property_map.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Shape_detection/include/CGAL/Shape_detection/Efficient_RANSAC/property_map.h $
+// $Id: property_map.h 590ddf8 2021-10-08T15:38:47+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -32,7 +32,7 @@ namespace Shape_detection {
   {
     typedef CGAL::Shape_detection::Shape_base<Traits> Shape;
     boost::shared_ptr<std::vector<int> > m_indices;
-    
+
   public:
     typedef std::size_t key_type; ///< %Index of the point in the random access point range.
     typedef int value_type; ///< %Index of the shape (-1 if the point is not assigned to any shape).
@@ -90,7 +90,7 @@ namespace Shape_detection {
     typedef value_type reference;
     typedef boost::read_write_property_map_tag category;
 
-    inline friend reference get (const Plane_map&, const key_type& k)
+    inline friend value_type get (const Plane_map&, const key_type& k)
     {
       return value_type(*k);
     }

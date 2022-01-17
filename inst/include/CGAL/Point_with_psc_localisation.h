@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Surface_mesher/include/CGAL/Point_with_psc_localisation.h $
-// $Id: Point_with_psc_localisation.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Surface_mesher/include/CGAL/Point_with_psc_localisation.h $
+// $Id: Point_with_psc_localisation.h 4e519a3 2021-05-05T13:15:37+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Laurent RINEAU
 
@@ -37,7 +37,7 @@ public:
   Point_with_psc_localisation() : Point(), index(), dim(-1) {}
 
   Point_with_psc_localisation(const Point& p) : Point(p), index(), dim(-1) {}
-			   
+
 //   Point_with_psc_localisation(const typename Kernel::Point_3& p) : Point(p), index(0) {}
 
   Point_with_psc_localisation(const Point_with_psc_localisation& p)
@@ -116,7 +116,7 @@ std::ostream&
 operator<<(std::ostream &os, const Point_with_psc_localisation<Point>& p)
 {
   os << static_cast<const Point&>(p);
-  if(is_ascii(os))
+  if(IO::is_ascii(os))
     os << ' ' << p.dimension() << ' ' << p.element_index();
   else {
     write(os, p.dimension());
@@ -131,7 +131,7 @@ operator>>(std::istream &is, Point_with_psc_localisation<Point>& p)
 {
   is >>  static_cast<Point&>(p);
   int index, dim;
-  if(is_ascii(is))
+  if(IO::is_ascii(is))
     is >> dim >> index;
   else {
     read(is, dim);

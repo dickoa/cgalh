@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Boolean_set_operations_2/include/CGAL/Boolean_set_operations_2/Gps_on_surface_base_2_impl.h $
-// $Id: Gps_on_surface_base_2_impl.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Boolean_set_operations_2/include/CGAL/Boolean_set_operations_2/Gps_on_surface_base_2_impl.h $
+// $Id: Gps_on_surface_base_2_impl.h 521c72d 2021-10-04T13:22:00+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -348,7 +348,7 @@ _insert(const Polygon_2& pgn, Arrangement_on_surface_2 & arr)
   }
 
   Face_const_handle const_f;
-  // face should not be contained as the pgn is completly disjoint of the
+  // face should not be contained as the pgn is completely disjoint of the
   // arrangement.
   CGAL_assertion(CGAL::assign(const_f, obj_f) && !const_f->contained());
   CGAL::assign(const_f, obj_f);
@@ -735,8 +735,8 @@ template <class Traits_, class TopTraits_, class ValidationPolicy>
   if (f->number_of_outer_ccbs() > 1)
     CGAL_error_msg("Not implemented yet.");
 
-	// Some compilers (VC 9) do not like that we directly access the ccb_circ. So we have
-	// to pass through the iterator.
+        // Some compilers (VC 9) do not like that we directly access the ccb_circ. So we have
+        // to pass through the iterator.
   Outer_ccb_const_iterator oci_temp = f->outer_ccbs_begin();
   Ccb_halfedge_const_circulator ccb_end = *oci_temp;
   Ccb_halfedge_const_circulator ccb_circ = ccb_end;

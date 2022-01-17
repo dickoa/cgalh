@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Three/include/CGAL/Three/Primitive_container.h $
-// $Id: Primitive_container.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Three/include/CGAL/Three/Primitive_container.h $
+// $Id: Primitive_container.h 26355e2 2020-06-25T12:31:21+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Maxime Gimeno
@@ -150,7 +150,7 @@ public:
   //!
   //! \name Setters for the shaders parameters.
   //!@{
-  
+
   //! Setter for the "selected" uniform parameter.
   void setSelected(bool);
   //! Setter for the "color" parameter.
@@ -163,7 +163,7 @@ public:
   void setTupleSize(int ts);
   //!setter for the clipping. If `b` is `false`, then the clipping box will have no effect.
   void setClipping(bool b);
-  
+
   //!@}
 
   //!
@@ -193,7 +193,7 @@ public:
   //! setter for the texture data at UV coordinates (`i`,`j`).
   void setTextureData  (int i, int j, int r, int g, int b);
   //!
-  //! \brief Returns the `Vao` bound to `viewer`.
+  //! \brief returns the `Vao` bound to `viewer`.
   //!
   Vao* getVao(Viewer_interface* viewer)const;
   //!
@@ -236,10 +236,10 @@ public:
   //! \brief getCenterSize returns the number of instances of
   //! the item in this container.
   std::size_t getCenterSize()const;
-  
+
   //! \name Getters for the shaders parameters.
   //!@{
-  
+
   //! getter for the "selected" parameter
   bool isSelected()const;
   //! getter for the "color" parameter

@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Mesh_2/include/CGAL/Delaunay_mesh_vertex_base_2.h $
-// $Id: Delaunay_mesh_vertex_base_2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Mesh_2/include/CGAL/Delaunay_mesh_vertex_base_2.h $
+// $Id: Delaunay_mesh_vertex_base_2.h e3934f1 2021-05-12T15:20:27+02:00 Laurent Rineau
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Jane Tournois
 
@@ -56,11 +56,19 @@ public:
   {}
 
   void set_sizing_info(const FT& s)
-  { 
+  {
     sizing_info_ = s;
   }
   const FT& sizing_info() const { return sizing_info_; }
+#ifdef CGAL_MESH_2_DEBUG_REFINEMENT_POINTS
+  typedef Tag_true Has_timestamp;
 
+  std::size_t time_stamp() const { return time_stamp_; }
+
+  void set_time_stamp(const std::size_t& ts) { time_stamp_ = ts; }
+
+  std::size_t time_stamp_;
+#endif // CGAL_MESH_2_DEBUG_REFINEMENT_POINTS
 };
 
 } // namespace CGAL

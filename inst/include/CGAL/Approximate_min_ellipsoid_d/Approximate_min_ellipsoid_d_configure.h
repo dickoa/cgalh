@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Bounding_volumes/include/CGAL/Approximate_min_ellipsoid_d/Approximate_min_ellipsoid_d_configure.h $
-// $Id: Approximate_min_ellipsoid_d_configure.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Bounding_volumes/include/CGAL/Approximate_min_ellipsoid_d/Approximate_min_ellipsoid_d_configure.h $
+// $Id: Approximate_min_ellipsoid_d_configure.h 5a36ff8 2020-12-04T08:02:26+00:00 Giles Bathgate
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -20,7 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
-#if (defined(CGAL_NO_ASSERTIONS) || defined(NDEBUG))
+#if defined(CGAL_NO_ASSERTIONS)
   #undef CGAL_APPEL_ASSERTION_MODE
   #undef CGAL_APPEL_EXP_ASSERTION_MODE
   #undef CGAL_APPEL_LOG_MODE
@@ -126,7 +126,7 @@
     #define CGAL_APPEL_TIMER_PRINT(channel,timer,msg) \
       { \
         CGAL_APPEL_LOG(channel,msg \
-	  	          << std::setiosflags(std::ios::fixed) \
+                            << std::setiosflags(std::ios::fixed) \
                           << std::setprecision(5) \
                           << CGAL::Approximate_min_ellipsoid_d_impl:: \
                              Timer::instance().lapse(timer) \

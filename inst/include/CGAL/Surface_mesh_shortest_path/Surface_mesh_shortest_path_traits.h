@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Surface_mesh_shortest_path/include/CGAL/Surface_mesh_shortest_path/Surface_mesh_shortest_path_traits.h $
-// $Id: Surface_mesh_shortest_path_traits.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Surface_mesh_shortest_path/include/CGAL/Surface_mesh_shortest_path/Surface_mesh_shortest_path_traits.h $
+// $Id: Surface_mesh_shortest_path_traits.h 26355e2 2020-06-25T12:31:21+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Stephen Kiazyk
@@ -164,14 +164,14 @@ std::ostream& operator<<(std::ostream& os, typename Surface_mesh_shortest_path_t
 }
 
 #ifdef CGAL_SMSP_USE_ROBUST_TRAITS_CODE
-#if defined(CGAL_USE_LEDA) || defined(CGAL_USE_CORE) 
+#if defined(CGAL_USE_LEDA) || defined(CGAL_USE_CORE)
 #ifndef DOXYGEN_RUNNING // needed due to a bug in doxygen
 /*!
 \ingroup PkgSurfaceMeshShortestPathTraitsClasses
 
 \internal
 
-\brief Provides an implementation of the SurfaceMeshShortestPathTraits
+\brief provides an implementation of the SurfaceMeshShortestPathTraits
 model which uses an exact Kernel during the unfolding operations to achieve better overall precision
 
 \tparam K Kernel Type

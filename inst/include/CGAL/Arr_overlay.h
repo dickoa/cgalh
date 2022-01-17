@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Arrangement_on_surface_2/include/CGAL/Arr_overlay.h $
-// $Id: Arr_overlay.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Arrangement_on_surface_2/include/CGAL/Arr_overlay.h $
+// $Id: Arr_overlay.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Eric Berberich <eric@mpi-inf.mpg.de>
 
@@ -17,7 +17,7 @@
 
 #define CGAL_DEPRECATED_HEADER "<CGAL/Arr_overlay.h>"
 #define CGAL_REPLACEMENT_HEADER "<CGAL/Arr_overlay_2.h>"
-#include <CGAL/internal/deprecation_warning.h>
+#include <CGAL/Installation/internal/deprecation_warning.h>
 
 #include <CGAL/Arr_overlay_2.h>
 

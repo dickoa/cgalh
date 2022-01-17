@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Polyline_simplification_2/include/CGAL/Polyline_simplification_2/Vertex_base_2.h $
-// $Id: Vertex_base_2.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Polyline_simplification_2/include/CGAL/Polyline_simplification_2/Vertex_base_2.h $
+// $Id: Vertex_base_2.h 53cb7cd 2021-02-16T13:41:28+00:00 Andreas Fabri
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Philipp Moeller
@@ -27,7 +27,7 @@ namespace Polyline_simplification_2 {
 /// \tparam Vb must be a model of the concept `TriangulationVertexBase_2`
 /// \cgalModels `PolylineSimplificationVertexBase_2`.
   template<class K, class Vb = CGAL::Triangulation_vertex_base_2<K> >
-class Vertex_base_2 
+class Vertex_base_2
   : public Vb
 {
   typedef typename K::FT FT;
@@ -37,6 +37,9 @@ class Vertex_base_2
   bool m_removable;
   FT m_cost;
 
+public:
+  std::size_t ID;
+
 #ifndef DOXYGEN_RUNNING
 public:
   template < typename TDS2 >
@@ -45,10 +48,10 @@ public:
     typedef Vertex_base_2<K,Vb2>         Other;
   };
 
-  Vertex_base_2() 
-    : Base(), m_removable(true), m_cost(-1.0) 
+  Vertex_base_2()
+    : Base(), m_removable(true), m_cost(-1.0)
   {}
-  
+
 
   bool is_removable() const
   {

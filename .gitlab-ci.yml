@@ -5,7 +5,7 @@ pages:
 
   script:
     - Rscript -e 'devtools::install_deps(dependencies = TRUE)'
-    - Rscript -e 'remotes::install_gitlab("dickoa/cgalheaders")'
+    - Rscript -e 'remotes::install_gitlab("dickoa/cgalh")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
 
   artifacts:

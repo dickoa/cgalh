@@ -7,8 +7,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Circulator/include/CGAL/Circulator/Circulator_concepts.h $
-// $Id: Circulator_concepts.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Circulator/include/CGAL/Circulator/Circulator_concepts.h $
+// $Id: Circulator_concepts.h c9af7a1 2020-10-14T10:59:46+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -39,9 +39,9 @@ void deref(T*) {
 
 // N.B.: there is no such concept as Circulator as it is immaterial
 template <typename C>
-struct ForwardCirculator 
+struct ForwardCirculator
   : boost::Assignable<C>, boost::DefaultConstructible<C>
-  , boost::CopyConstructible<C> 
+  , boost::CopyConstructible<C>
 {
   // for some odd reason circulators have no associated traits
   typedef typename C::value_type value_type;
@@ -57,12 +57,9 @@ struct ForwardCirculator
 
   BOOST_CONCEPT_USAGE(ForwardCirculator)
   {
-    // CGAL_UNUSED is needed with g++ 4.8, otherwise it warns:
-    // "typedef ‘boost_concept_check68’ locally defined but not used
-    // [-Wunused-local-typedefs]"
-    BOOST_CONCEPT_ASSERT((boost::SignedInteger<difference_type>)) CGAL_UNUSED;
-    BOOST_CONCEPT_ASSERT((boost::Convertible<iterator_category, CGAL::Forward_circulator_tag>)) CGAL_UNUSED;
-    
+    BOOST_CONCEPT_ASSERT((boost::SignedInteger<difference_type>));
+    BOOST_CONCEPT_ASSERT((boost::Convertible<iterator_category, CGAL::Forward_circulator_tag>));
+
     boost::require_boolean_expr(a == nullptr);
     boost::require_boolean_expr(a != nullptr);
     ++a;
@@ -82,7 +79,7 @@ struct BidirectionalCirculator
 {
   BOOST_CONCEPT_USAGE(BidirectionalCirculator)
   {
-    BOOST_CONCEPT_ASSERT((boost::Convertible<typename C::iterator_category, CGAL::Bidirectional_circulator_tag>)) CGAL_UNUSED;
+    BOOST_CONCEPT_ASSERT((boost::Convertible<typename C::iterator_category, CGAL::Bidirectional_circulator_tag>));
     --a;
     a--;
   }
@@ -96,11 +93,11 @@ struct RandomAccessCirculator
 {
   BOOST_CONCEPT_USAGE(RandomAccessCirculator)
   {
-    BOOST_CONCEPT_ASSERT((boost::Convertible<typename C::iterator_category, CGAL::Random_access_circulator_tag>)) CGAL_UNUSED;
+    BOOST_CONCEPT_ASSERT((boost::Convertible<typename C::iterator_category, CGAL::Random_access_circulator_tag>));
     c += n; // addition
     c = c + n; c = n + c;
     c -= n; // subtraction
-    c = c - n; 
+    c = c - n;
     n = c - b; // difference
     (void)c[n]; // operator[]
 

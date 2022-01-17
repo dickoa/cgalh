@@ -3,14 +3,14 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Three/include/CGAL/Three/Polyhedron_demo_plugin_helper.h $
-// $Id: Polyhedron_demo_plugin_helper.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Three/include/CGAL/Three/Polyhedron_demo_plugin_helper.h $
+// $Id: Polyhedron_demo_plugin_helper.h 26355e2 2020-06-25T12:31:21+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
 // Author(s)     : Laurent RINEAU
 
-//! \file Polyhedron_demo_plugin_helper.h 
+//! \file Polyhedron_demo_plugin_helper.h
 #ifndef POLYHEDRON_DEMO_OPERATION_HELPER_H
 #define POLYHEDRON_DEMO_OPERATION_HELPER_H
 
@@ -32,7 +32,7 @@ class QDockWidget;
 #include <CGAL/Three/Scene_interface.h>
 namespace CGAL {
 namespace Three {
-  /*! \brief Provides convenient functions for a plugin.
+  /*! \brief provides convenient functions for a plugin.
    * This class provides convenient functions to manage dock_widgets and to access a certain type of items in the scene.
    * It also provides member variables for a Scene_interface and a QMainWindow.
    */
@@ -41,7 +41,7 @@ class SCENE_ITEM_EXPORT Polyhedron_demo_plugin_helper
 {
 public:
 
-  /*! \brief Gets an item of the templated type.
+  /*! \brief gets an item of the templated type.
    * \returns The currently selected `SceneType` item
    * \returns the first `SceneType` item found in the scene's list of items if the selected item is not a `SceneType`
    * \returns nullptr if there is no `SceneType` in the list.

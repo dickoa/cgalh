@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Filtered_kernel/include/CGAL/Filtered_construction.h $
-// $Id: Filtered_construction.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Filtered_kernel/include/CGAL/Filtered_construction.h $
+// $Id: Filtered_construction.h c8624ee 2021-09-09T11:01:03+02:00 Sébastien Loriot
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Menelaos Karavelas <mkaravel@iacm.forth.gr>
 
@@ -19,7 +19,7 @@
 namespace CGAL {
 
 template <class AC, class EC, class FC, class C2E, class C2F,
-	  class E2C, class F2C,	bool Protection = true>
+          class E2C, class F2C,        bool Protection = true>
 class Filtered_construction
 {
 private:
@@ -44,54 +44,60 @@ public:
   result_type
   operator()(const A1 &a1) const
   {
-    // Protection is outside the try block as VC8 has the CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
-    Protect_FPU_rounding<Protection> P1;
-    try
     {
-      return From_Filtered( Filter_construction(To_Filtered(a1)) );
+      // Protection is outside the try block as VC8 has the CGAL_CFG_FPU_ROUNDING_MODE_UNWINDING_VC_BUG
+      Protect_FPU_rounding<Protection> P1;
+      try
+      {
+        return From_Filtered( Filter_construction(To_Filtered(a1)) );
+      }
+      catch (Uncertain_conversion_exception&)
+      {}
     }
-    catch (Uncertain_conversion_exception&)
-    {
-      Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
-      return From_Exact( Exact_construction(To_Exact(a1)) );
-    }
+    Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
+    CGAL_expensive_assertion(FPU_get_cw() == CGAL_FE_TONEAREST);
+    return From_Exact( Exact_construction(To_Exact(a1)) );
   }
   template <class A1, class A2>
   result_type
   operator()(const A1 &a1, const A2 &a2) const
   {
-    Protect_FPU_rounding<Protection> P1;
-    try
     {
-      return From_Filtered( Filter_construction(To_Filtered(a1),
-						To_Filtered(a2)) );
+      Protect_FPU_rounding<Protection> P1;
+      try
+      {
+        return From_Filtered( Filter_construction(To_Filtered(a1),
+                                                  To_Filtered(a2)) );
+      }
+      catch (Uncertain_conversion_exception&)
+      {}
     }
-    catch (Uncertain_conversion_exception&)
-    {
-      Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
-      return From_Exact( Exact_construction(To_Exact(a1),
-					    To_Exact(a2)) );
-    }
+    Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
+    CGAL_expensive_assertion(FPU_get_cw() == CGAL_FE_TONEAREST);
+    return From_Exact( Exact_construction(To_Exact(a1),
+                                          To_Exact(a2)) );
   }
 
   template <class A1, class A2, class A3>
   result_type
   operator()(const A1 &a1, const A2 &a2, const A3 &a3) const
   {
-    Protect_FPU_rounding<Protection> P1;
-    try
     {
-      return From_Filtered( Filter_construction(To_Filtered(a1),
-						To_Filtered(a2),
-						To_Filtered(a3)) );
+      Protect_FPU_rounding<Protection> P1;
+      try
+      {
+        return From_Filtered( Filter_construction(To_Filtered(a1),
+                                                  To_Filtered(a2),
+                                                  To_Filtered(a3)) );
+      }
+      catch (Uncertain_conversion_exception&)
+      {}
     }
-    catch (Uncertain_conversion_exception&)
-    {
-      Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
-      return From_Exact( Exact_construction(To_Exact(a1),
-					    To_Exact(a2),
-					    To_Exact(a3)) );
-    }
+    Protect_FPU_rounding<!Protection> P(CGAL_FE_TONEAREST);
+    CGAL_expensive_assertion(FPU_get_cw() == CGAL_FE_TONEAREST);
+    return From_Exact( Exact_construction(To_Exact(a1),
+                                          To_Exact(a2),
+                                          To_Exact(a3)) );
   }
 
 };

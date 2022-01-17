@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Triangulation/include/CGAL/TDS_full_cell_default_storage_policy.h $
-// $Id: TDS_full_cell_default_storage_policy.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Triangulation/include/CGAL/TDS_full_cell_default_storage_policy.h $
+// $Id: TDS_full_cell_default_storage_policy.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)    : Samuel Hornus
@@ -17,7 +17,7 @@
 
 #include <CGAL/Dimension.h>
 #include <CGAL/Compact_container.h>
-#include <CGAL/internal/Static_or_dynamic_array.h>
+#include <CGAL/Triangulation/internal/Static_or_dynamic_array.h>
 
 #include <boost/cstdint.hpp>
 
@@ -44,7 +44,7 @@ struct TFC_data< Vertex_handle, Full_cell_handle, Dimen, TDS_full_cell_default_s
     : vertices_(dmax+1), neighbors_(dmax+1)
     {}
     void*   for_compact_container() const { return vertices_.for_compact_container(); }
-    void* & for_compact_container()       { return vertices_.for_compact_container(); }
+    void    for_compact_container(void *p){ vertices_.for_compact_container(p); }
     int dimension() const { return ( vertices_.size() - 1 ); }
     void set_mirror_index(const int, const int) {}
 #ifdef BOOST_NO_INT64_T

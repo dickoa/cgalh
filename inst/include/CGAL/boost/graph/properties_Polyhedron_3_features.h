@@ -2,8 +2,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Polyhedron/include/CGAL/boost/graph/properties_Polyhedron_3_features.h $
-// $Id: properties_Polyhedron_3_features.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Polyhedron/include/CGAL/boost/graph/properties_Polyhedron_3_features.h $
+// $Id: properties_Polyhedron_3_features.h 590ddf8 2021-10-08T15:38:47+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -19,7 +19,7 @@
 
 namespace CGAL {
 
-  
+
 namespace internal{
 BOOST_MPL_HAS_XXX_TRAIT_DEF(Plane_3)
 
@@ -27,8 +27,8 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(Plane_3)
 template <class Gt, class I, CGAL_HDS_PARAM_, class A>
 struct Get_static_property_map {
   typedef boost::graph_traits<CGAL::Polyhedron_3<Gt,I,HDS,A> > Graph_traits;
-  typedef CGAL::Static_property_map<typename Graph_traits::face_descriptor,
-                                    std::pair<int,int> > type;
+  typedef CGAL::Constant_property_map<typename Graph_traits::face_descriptor,
+                                      std::pair<int,int> > type;
 };
 
 } // end namespace internal
@@ -50,8 +50,7 @@ Patch_id get(Polyhedron_face_patch_id_pmap<Patch_id>, Handle_type h)
 }
 
 template <typename Patch_id, typename Handle_type>
-void put(Polyhedron_face_patch_id_pmap<Patch_id>, Handle_type h,
-         Patch_id pid)
+void put(Polyhedron_face_patch_id_pmap<Patch_id>, Handle_type h, Patch_id pid)
 {
   h->set_patch_id(pid);
 }
@@ -199,11 +198,10 @@ struct Polyhedron_incident_patches_pmap {
   typedef boost::lvalue_property_map_tag     category;
 
   template <typename Handle_type>
-  value_type& operator[](Handle_type h) const
+  reference operator[](Handle_type h) const
   {
     return get(*this, h);
   }
-
 };
 
 template <typename Patch_id, typename Handle_type>

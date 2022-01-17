@@ -1,10 +1,3 @@
-#' Provides CGAL 'C++' header-only library.
+#' Provides the 'C++' header-only library of CGAL
 #'
-#' @examples
-#' \dontrun{
-#'
-#' # Include a dependency to cgalh inside a cpp file
-#' // [[Rcpp::depends(cgalh)]]
-#' include <Rcpp.h>
-#' }
 "_PACKAGE"

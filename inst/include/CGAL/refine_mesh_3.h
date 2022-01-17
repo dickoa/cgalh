@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Mesh_3/include/CGAL/refine_mesh_3.h $
-// $Id: refine_mesh_3.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Mesh_3/include/CGAL/refine_mesh_3.h $
+// $Id: refine_mesh_3.h 3e03d50 2021-05-05T15:32:22+02:00 Maxime Gimeno
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -28,9 +28,10 @@
 #include <CGAL/Mesh_3/Mesher_3.h>
 #include <CGAL/Mesh_error_code.h>
 #include <CGAL/optimize_mesh_3.h>
-#include <CGAL/atomic.h>
 
 #include <boost/parameter/preprocessor.hpp>
+
+#include <atomic>
 
 namespace CGAL {
 
@@ -196,7 +197,7 @@ struct Manifold_options {
 // Various Mesh_3 option
 struct Mesh_3_options {
 #ifndef CGAL_NO_ATOMIC
-      typedef CGAL::cpp11::atomic<bool>* Pointer_to_stop_atomic_boolean_t;
+      typedef std::atomic<bool>* Pointer_to_stop_atomic_boolean_t;
 #else
       typedef bool* Pointer_to_stop_atomic_boolean_t;
 #endif
@@ -374,10 +375,10 @@ BOOST_PARAMETER_FUNCTION((internal::Mesh_3_options), mesh_3_options, tag,
                           (dump_after_perturb_prefix_, (std::string), "" )
                           (dump_after_exude_prefix_, (std::string), "" )
                           (number_of_initial_points_, (int), -1)
-			  (maximal_number_of_vertices_, (std::size_t), 0)
+                          (maximal_number_of_vertices_, (std::size_t), 0)
                           (nonlinear_growth_of_balls_, (bool), false)
-			  (pointer_to_error_code_, (Mesh_error_code*), ((Mesh_error_code*)0))
-			  (pointer_to_stop_atomic_boolean_, (internal::Mesh_3_options::Pointer_to_stop_atomic_boolean_t), ((internal::Mesh_3_options::Pointer_to_stop_atomic_boolean_t)0))
+                          (pointer_to_error_code_, (Mesh_error_code*), ((Mesh_error_code*)0))
+                          (pointer_to_stop_atomic_boolean_, (internal::Mesh_3_options::Pointer_to_stop_atomic_boolean_t), ((internal::Mesh_3_options::Pointer_to_stop_atomic_boolean_t)0))
                           )
                          )
 {
@@ -450,7 +451,7 @@ CGAL_PRAGMA_DIAG_POP
 } // end namespace parameters
 
 
-  
+
 #if defined(BOOST_MSVC)
 #  pragma warning(push)
 #  pragma warning(disable:4003) // not enough actual parameters for macro
@@ -555,7 +556,7 @@ void refine_mesh_3_impl(C3T3& c3t3,
 #ifndef CGAL_NO_ATOMIC
                  , mesh_options.pointer_to_stop_atomic_boolean
 #endif
-		 );
+                 );
   double refine_time = mesher.refine_mesh(mesh_options.dump_after_refine_surface_prefix);
   c3t3.clear_manifold_info();
 

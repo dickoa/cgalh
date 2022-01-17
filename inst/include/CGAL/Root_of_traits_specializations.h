@@ -4,8 +4,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Number_types/include/CGAL/Root_of_traits_specializations.h $
-// $Id: Root_of_traits_specializations.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Number_types/include/CGAL/Root_of_traits_specializations.h $
+// $Id: Root_of_traits_specializations.h cdbd4c7 2021-02-17T23:25:52+01:00 Marc Glisse
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -52,21 +52,26 @@ struct Lazy_exact_ro2
 
     void update_exact() const
     {
+        typedef typename Base::Indirect I;
+        I* pet;
         if (old_rep)
-          this->et = new RO2(make_root_of_2(op1.exact(), op2.exact(),
-                                            op3.exact(), smaller));
+          pet = new I(make_root_of_2(op1.exact(), op2.exact(),
+                                     op3.exact(), smaller));
         else
-          this->et = new RO2(make_root_of_2(op1.exact(), op2.exact(),
-                                            op3.exact()));
+          pet = new I(make_root_of_2(op1.exact(), op2.exact(),
+                                     op3.exact()));
         if (!this->approx().is_point())
-            this->at = to_interval(*(this->et));
+            this->set_at(pet);
+        this->set_ptr(pet);
         this->prune_dag();
 
     }
 
     void prune_dag() const
     {
-        op1 = op2 = op3 = Lazy_exact_nt<ET>();
+        op1.reset();
+        op2.reset();
+        op3.reset();
     }
 };
 
@@ -93,11 +98,11 @@ public:
           return new Lazy_exact_ro2<NT>(a, b, c, smaller);
         };
     };
-  
+
 private:
   typedef CGAL::Algebraic_structure_traits<Root_of_2> AST;
 public:
-  typedef typename AST::Square  Square; 
+  typedef typename AST::Square  Square;
   typedef typename AST::Inverse Inverse;
 
   struct Make_sqrt{

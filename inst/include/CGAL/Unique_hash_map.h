@@ -1,16 +1,16 @@
-// Copyright (c) 1997-2000  
+// Copyright (c) 1997-2000
 // Utrecht University (The Netherlands),
 // ETH Zurich (Switzerland),
 // INRIA Sophia-Antipolis (France),
 // Max-Planck-Institute Saarbruecken (Germany),
-// and Tel-Aviv University (Israel).  All rights reserved. 
+// and Tel-Aviv University (Israel).  All rights reserved.
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Hash_map/include/CGAL/Unique_hash_map.h $
-// $Id: Unique_hash_map.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Hash_map/include/CGAL/Unique_hash_map.h $
+// $Id: Unique_hash_map.h 590ddf8 2021-10-08T15:38:47+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Michael Seel <seel@mpi-sb.mpg.de>
 //                 Lutz Kettner <kettner@inf.ethz.ch>
@@ -28,7 +28,7 @@
 
 namespace CGAL {
 
-template <class Key_, class Data_, 
+template <class Key_, class Data_,
           class UniqueHashFunction = Handle_hash_function,
           class Allocator_ = CGAL_ALLOCATOR(Data_) >
 class Unique_hash_map {
@@ -59,12 +59,12 @@ public:
 
     Unique_hash_map( const Data& deflt, std::size_t table_size = 1)
         : m_map( table_size) { m_map.xdef() = deflt; }
-    
+
     Unique_hash_map( const Data& deflt,
                      std::size_t table_size,
                      const Hash_function& fct)
         : m_hash_function(fct), m_map( table_size) { m_map.xdef() = deflt; }
-    
+
     Unique_hash_map( Key first1, Key beyond1, Data first2) {
         m_map.xdef() = Data();
         insert( first1, beyond1, first2);
@@ -73,7 +73,7 @@ public:
                      const Data& deflt,
                      std::size_t table_size   = 1,
                      const Hash_function& fct = Hash_function())
-    : m_hash_function(fct), m_map( table_size) { 
+    : m_hash_function(fct), m_map( table_size) {
         m_map.xdef() = deflt;
         insert( first1, beyond1, first2);
     }
@@ -88,8 +88,8 @@ public:
         m_map.clear();
         m_map.xdef() = deflt; }
 
-    bool is_defined( const Key& key) const { 
-        return m_map.lookup( m_hash_function(key)) != 0; 
+    bool is_defined( const Key& key) const {
+        return m_map.lookup( m_hash_function(key)) != 0;
     }
 
     const Data& operator[]( const Key& key) const {
@@ -100,7 +100,7 @@ public:
     }
 
     Data& operator[]( const Key& key) {
-        return m_map.access( m_hash_function(key)); 
+        return m_map.access( m_hash_function(key));
     }
 
     Data insert( Key first1, Key beyond1, Data first2) {
@@ -133,27 +133,29 @@ namespace boost {
   public:
     typedef KeyType key_type;
     typedef ValueType value_type;
-    typedef const value_type& reference;
+    typedef value_type& reference;
     typedef lvalue_property_map_tag category;
+
     associative_property_map() : m_c(0) { }
     associative_property_map(C& c) : m_c(&c) { }
-    value_type& operator[](const key_type& k) const {
+
+    reference operator[](const key_type& k) const {
       return (*m_c)[k];
     }
 
-  friend
-  const value_type&
-  get(const associative_property_map<C>& uhm, const key_type& key)
-  {
-    return uhm[key];
-  }
+    friend
+    reference
+    get(const associative_property_map<C>& uhm, const key_type& key)
+    {
+      return uhm[key];
+    }
 
-  friend
-  void
-  put(associative_property_map<C>& uhm, const key_type& key, const value_type& val)
-  {
-    uhm[key] = val;
-  }
+    friend
+    void
+    put(associative_property_map<C>& uhm, const key_type& key, const value_type& val)
+    {
+      uhm[key] = val;
+    }
 
   private:
     C* m_c;

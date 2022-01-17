@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Combinatorial_map/include/CGAL/Combinatorial_map_iterators_base.h $
-// $Id: Combinatorial_map_iterators_base.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Combinatorial_map/include/CGAL/Combinatorial_map_iterators_base.h $
+// $Id: Combinatorial_map_iterators_base.h 5ecd852 2021-04-26T21:37:02+01:00 Giles Bathgate
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Guillaume Damiand <guillaume.damiand@liris.cnrs.fr>
@@ -106,7 +106,7 @@ namespace CGAL {
     {
       return ( ((*this==mmap->null_handle) && (aiterator==mmap->null_handle)) ||
                (mfirst_dart == aiterator.mfirst_dart &&
-               static_cast<const Base&>(*this)==
+                static_cast<const Base&>(*this)==
                 static_cast<const Base&>(aiterator)) );
     }
 
@@ -389,7 +389,7 @@ namespace CGAL {
     {}
 
     /// Destructor.
-    ~CMap_non_basic_iterator() CGAL_NOEXCEPT(CGAL_NO_ASSERTIONS_BOOL)
+    ~CMap_non_basic_iterator() noexcept(!CGAL_ASSERTIONS_ENABLED)
     {
       CGAL_destructor_assertion( this->mmark_number!=Map::INVALID_MARK );
       if (this->mmap->get_number_of_times_mark_reserved

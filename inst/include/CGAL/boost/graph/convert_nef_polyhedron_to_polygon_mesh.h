@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Nef_3/include/CGAL/boost/graph/convert_nef_polyhedron_to_polygon_mesh.h $
-// $Id: convert_nef_polyhedron_to_polygon_mesh.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Nef_3/include/CGAL/boost/graph/convert_nef_polyhedron_to_polygon_mesh.h $
+// $Id: convert_nef_polyhedron_to_polygon_mesh.h 3795c52 2021-05-18T10:16:24+02:00 Maxime Gimeno
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -22,7 +22,7 @@
 #include <CGAL/Cartesian_converter.h>
 #include <boost/unordered_map.hpp>
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
-#include <CGAL/Triangulation_2_projection_traits_3.h>
+#include <CGAL/Projection_traits_3.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Kernel/global_functions_3.h>
@@ -210,8 +210,8 @@ struct Shell_polygons_visitor
     }
 
     // cases where a cdt is needed
-    typedef typename Nef_polyhedron::Kernel Kernel;
-    typedef Triangulation_2_projection_traits_3<Kernel>            P_traits;
+    typedef typename Nef_polyhedron::Kernel                              Kernel;
+    typedef Projection_traits_3<Kernel>                                  P_traits;
     typedef Triangulation_vertex_base_with_info_2<std::size_t, P_traits> Vb;
     typedef Triangulation_face_base_with_info_2<FaceInfo2,P_traits>     Fbb;
     typedef Constrained_triangulation_face_base_2<P_traits,Fbb>          Fb;
@@ -347,7 +347,7 @@ void convert_nef_polyhedron_to_polygon_soup(const Nef_polyhedron& nef,
   typedef typename Kernel_traits<Point_3>::Kernel Nef_Kernel;
   typedef typename PointRange::value_type Out_Point;
   typedef typename Kernel_traits<Out_Point>::Kernel Output_kernel;
-  
+
   typedef Cartesian_converter<Nef_Kernel, Output_kernel> Converter;
   typename Nef_polyhedron::Volume_const_iterator vol_it = nef.volumes_begin(),
                                                  vol_end = nef.volumes_end();

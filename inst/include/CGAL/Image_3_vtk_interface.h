@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/CGAL_ImageIO/include/CGAL/Image_3_vtk_interface.h $
-// $Id: Image_3_vtk_interface.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/CGAL_ImageIO/include/CGAL/Image_3_vtk_interface.h $
+// $Id: Image_3_vtk_interface.h 91d6635 2021-06-16T15:04:45+02:00 Laurent Rineau
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 // Author(s)     : Laurent Rineau
 
 
@@ -84,6 +84,7 @@ struct VTK_type_generator<boost::uint32_t> {
   typedef vtkUnsignedIntArray ArrayType;
 };
 
+inline
 ::vtkImageData* vtk_image_sharing_same_data_pointer(Image_3& image)
 {
   vtkImageData* vtk_image = vtkImageData::New();
@@ -110,6 +111,9 @@ struct VTK_type_generator<boost::uint32_t> {
   vtk_image->SetSpacing(image.vx(),
                         image.vy(),
                         image.vz());
+  vtk_image->SetOrigin(image.tx(),
+                       image.ty(),
+                       image.tz());
   vtk_image->AllocateScalars(type, 1);
   vtk_image->GetPointData()->SetScalars(data_array);
   return vtk_image;

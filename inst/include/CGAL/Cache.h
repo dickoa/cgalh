@@ -1,17 +1,14 @@
-// =============================================================================
-//
 // Copyright (c) 2001-2007 Max-Planck-Institute Saarbruecken (Germany).
 // All rights reserved.
 //
 // This file is part of CGAL (www.cgal.org)
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/STL_Extension/include/CGAL/Cache.h $
-// $Id: Cache.h 52164b1 2019-10-19T15:34:59+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/STL_Extension/include/CGAL/Cache.h $
+// $Id: Cache.h f55ef7d 2020-10-09T18:36:17+02:00 Mael Rouxel-Labbé
 // SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Michael Hemmer    <hemmer@mpi-inf.mpg.de>
 //
-// =============================================================================
 
 #ifndef CGAL_CACHE_H
 #define CGAL_CACHE_H 1
@@ -87,7 +84,7 @@ public:
     //! default constructor with empty table
     Cache() : map() {};
 
-    /*! \brief Returns the respective object of type Output.
+    /*! \brief returns the respective object of type Output.
      *
      *  If the object is not in the cache, it is constructed form \c key and
      *  added to the cache.
@@ -124,28 +121,28 @@ public:
     //! Returns an Iterator pointing to the end of the cache.
     Iterator end() { return map.end(); }
 
-    //!	Returns a Const_iterator pointing to the beginning of the cache.
+    //!        Returns a Const_iterator pointing to the beginning of the cache.
     Const_iterator begin() const { return map.begin(); }
 
     //! Returns a Const_iterator pointing to the end of the cache.
     Const_iterator end() const { return map.end(); }
 
-    /*!	\brief Returns a Reverse_iterator pointing to the beginning of the
+    /*!        \brief returns a Reverse_iterator pointing to the beginning of the
      *  reversed cache.
      */
     Reverse_iterator rbegin() { return map.rbegin(); }
 
-    /*!	\brief Returns a Reverse_iterator pointing to the end of the reversed
+    /*!        \brief returns a Reverse_iterator pointing to the end of the reversed
      *  cache.
      */
     Reverse_iterator rend() { return map.rend(); }
 
-    /*!	\brief Returns a Const_reverse_iterator pointing to the beginning of
+    /*!        \brief returns a Const_reverse_iterator pointing to the beginning of
      *  the reversed cache.
      */
     Const_reverse_iterator rbegin() const { return map.rbegin(); }
 
-    /*!	\brief Returns a Const_reverse_iterator pointing to the end of the
+    /*!        \brief returns a Const_reverse_iterator pointing to the end of the
      *  reversed cache.
      */
     Const_reverse_iterator rend() const { return map.rend(); }

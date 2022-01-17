@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/MVC_post_processor_3.h $
-// $Id: MVC_post_processor_3.h e872a79 2020-01-15T17:31:47+01:00 Laurent Rineau
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Surface_mesh_parameterization/include/CGAL/Surface_mesh_parameterization/MVC_post_processor_3.h $
+// $Id: MVC_post_processor_3.h 6fe0b06 2021-06-09T13:35:34+02:00 Dmitry Anisimov
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Mael Rouxel-Labbé
@@ -14,12 +14,14 @@
 
 #include <CGAL/license/Surface_mesh_parameterization.h>
 
+#include <CGAL/Surface_mesh_parameterization/internal/Bool_property_map.h>
 #include <CGAL/Surface_mesh_parameterization/internal/Containers_filler.h>
 #include <CGAL/Surface_mesh_parameterization/internal/kernel_traits.h>
 
 #include <CGAL/Surface_mesh_parameterization/Two_vertices_parameterizer_3.h>
 #include <CGAL/Surface_mesh_parameterization/parameterize.h>
 
+#include <CGAL/Weights/tangent_weights.h>
 #include <CGAL/Constrained_triangulation_2.h>
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Polygon_mesh_processing/border.h>
@@ -93,29 +95,33 @@ public:
   #endif
   >::type                                                     Solver_traits;
 #else
+  /// Solver traits type
   typedef SolverTraits_                                       Solver_traits;
 #endif
+
+  /// Triangle mesh type
+  typedef TriangleMesh_                                       Triangle_mesh;
 
   typedef TriangleMesh_                                       TriangleMesh;
 
 // Private types
 private:
   // This class
-  typedef MVC_post_processor_3<TriangleMesh, Solver_traits>  Self;
+  typedef MVC_post_processor_3<Triangle_mesh, Solver_traits>  Self;
 
 // Private types
 private:
-  typedef typename boost::graph_traits<TriangleMesh>::vertex_descriptor    vertex_descriptor;
-  typedef typename boost::graph_traits<TriangleMesh>::halfedge_descriptor  halfedge_descriptor;
-  typedef typename boost::graph_traits<TriangleMesh>::face_descriptor      face_descriptor;
-  typedef typename boost::graph_traits<TriangleMesh>::face_iterator        face_iterator;
-  typedef typename boost::graph_traits<TriangleMesh>::vertex_iterator      vertex_iterator;
+  typedef typename boost::graph_traits<Triangle_mesh>::vertex_descriptor    vertex_descriptor;
+  typedef typename boost::graph_traits<Triangle_mesh>::halfedge_descriptor  halfedge_descriptor;
+  typedef typename boost::graph_traits<Triangle_mesh>::face_descriptor      face_descriptor;
+  typedef typename boost::graph_traits<Triangle_mesh>::face_iterator        face_iterator;
+  typedef typename boost::graph_traits<Triangle_mesh>::vertex_iterator      vertex_iterator;
 
   typedef boost::unordered_set<vertex_descriptor>       Vertex_set;
   typedef std::vector<face_descriptor>                  Faces_vector;
 
   // Traits subtypes:
-  typedef typename internal::Kernel_traits<TriangleMesh>::Kernel    Kernel;
+  typedef typename internal::Kernel_traits<Triangle_mesh>::Kernel   Kernel;
   typedef typename Kernel::FT                                       NT;
   typedef typename Kernel::Point_2                                  Point_2;
   typedef typename Kernel::Vector_2                                 Vector_2;
@@ -127,17 +133,16 @@ private:
 
   // Types used for the convexification of the mesh
     // Each triangulation vertex is associated its corresponding vertex_descriptor
-  typedef CGAL::Triangulation_vertex_base_with_info_2<vertex_descriptor,
-                                                      Kernel>       Vb;
-    // Each triangultaion face is associated a color (inside/outside information)
-  typedef CGAL::Triangulation_face_base_with_info_2<int, Kernel>    Fb;
-  typedef CGAL::Constrained_triangulation_face_base_2<Kernel, Fb>   Cfb;
-  typedef CGAL::Triangulation_data_structure_2<Vb, Cfb>             TDS;
-  typedef CGAL::No_intersection_tag                                 Itag;
+  typedef CGAL::Triangulation_vertex_base_with_info_2<vertex_descriptor, Kernel>  Vb;
+    // Each triangulation face is associated a color (inside/outside information)
+  typedef CGAL::Triangulation_face_base_with_info_2<int, Kernel>                  Fb;
+  typedef CGAL::Constrained_triangulation_face_base_2<Kernel, Fb>                 Cfb;
+  typedef CGAL::Triangulation_data_structure_2<Vb, Cfb>                           TDS;
+  typedef CGAL::No_constraint_intersection_requiring_constructions_tag            Itag;
 
     // Can choose either a triangulation or a Delaunay triangulation
-  typedef CGAL::Constrained_triangulation_2<Kernel, TDS, Itag>                CT;
-//    typedef CGAL::Constrained_Delaunay_triangulation_2<Kernel, TDS, Itag>   CT;
+  typedef CGAL::Constrained_triangulation_2<Kernel, TDS, Itag>                    CT;
+//  typedef CGAL::Constrained_Delaunay_triangulation_2<Kernel, TDS, Itag>           CT;
 
 // Private fields
 private:
@@ -190,12 +195,12 @@ private:
 // Private operations
 private:
   // Store the vertices and faces of the mesh in memory.
-  void initialize_containers(const TriangleMesh& mesh,
+  void initialize_containers(const Triangle_mesh& mesh,
                              halfedge_descriptor bhd,
                              Vertex_set& vertices,
                              Faces_vector& faces) const
   {
-    internal::Containers_filler<TriangleMesh> fc(mesh, vertices, &faces);
+    internal::Containers_filler<Triangle_mesh> fc(mesh, vertices, &faces);
     CGAL::Polygon_mesh_processing::connected_component(
                                       face(opposite(bhd, mesh), mesh),
                                       mesh,
@@ -204,7 +209,7 @@ private:
 
   // Checks whether the polygon's border is simple.
   template <typename VertexUVMap>
-  bool is_polygon_simple(const TriangleMesh& mesh,
+  bool is_polygon_simple(const Triangle_mesh& mesh,
                          halfedge_descriptor bhd,
                          const VertexUVMap uvmap) const
   {
@@ -274,7 +279,7 @@ private:
   // Triangulate the convex hull of the border of the parameterization.
   template <typename CT,
             typename VertexUVMap>
-  Error_code triangulate_convex_hull(const TriangleMesh& mesh,
+  Error_code triangulate_convex_hull(const Triangle_mesh& mesh,
                                      halfedge_descriptor bhd,
                                      const VertexUVMap uvmap,
                                      CT& ct) const
@@ -350,22 +355,6 @@ private:
     return OK;
   }
 
-  //                                                      -> ->
-  // Return angle (in radians) of of (P,Q,R) corner (i.e. QP,QR angle).
-  double compute_angle_rad(const Point_2& P,
-                           const Point_2& Q,
-                           const Point_2& R) const
-  {
-    Vector_2 u = P - Q;
-    Vector_2 v = R - Q;
-
-    double angle = std::atan2(v.y(), v.x()) - std::atan2(u.y(), u.x());
-    if(angle < 0)
-      angle += 2 * CGAL_PI;
-
-    return angle;
-  }
-
   // Fix vertices that are on the convex hull.
   template <typename CT,
             typename VertexParameterizedMap>
@@ -379,23 +368,6 @@ private:
       vertex_descriptor vd = vc->info();
       put(vpmap, vd, true);
     } while (++vc != vend);
-  }
-
-  NT compute_w_ij_mvc(const Point_2& pi, const Point_2& pj, const Point_2& pk) const
-  {
-    //                                                               ->     ->
-    // Compute the angle (pj, pi, pk), the angle between the vectors ij and ik
-    NT angle = compute_angle_rad(pj, pi, pk);
-
-    // For flipped triangles, the connectivity is inversed and thus the angle
-    // computed by the previous function is not the one we need. Instead,
-    // we need the explementary angle.
-    if(angle > CGAL_PI) { // flipped triangle
-      angle = 2 * CGAL_PI - angle;
-    }
-    NT weight = std::tan(0.5 * angle);
-
-    return weight;
   }
 
   void fill_linear_system_matrix_mvc_from_points(const Point_2& pi, int i,
@@ -414,27 +386,25 @@ private:
     // The other parts of A(i,j) and A(i,k) will be added when this function
     // is called from the neighboring faces of F_ijk that share the vertex i
 
-    // Compute: - tan(alpha / 2)
-    NT w_i_base = -1.0 * compute_w_ij_mvc(pi, pj, pk);
-
     // @fixme unefficient: lengths are computed (and inversed!) twice per edge
 
+    // Set w_i_base: - tan(alpha / 2)
+    // Match order of the input points to the new weight implementation.
+    const Point_2& p = pk;
+    const Point_2& q = pi;
+    const Point_2& r = pj;
+    const CGAL::Weights::Tangent_weight<NT> tangent_weight(p, q, r);
+
     // Set w_ij in matrix
-    Vector_2 edge_ij = pi - pj;
-    double len_ij = std::sqrt(edge_ij * edge_ij);
-    CGAL_assertion(len_ij != 0.0); // two points are identical!
-    NT w_ij = w_i_base / len_ij;
+    const NT w_ij = tangent_weight.get_w_r();
     A.add_coef(i, j, w_ij);
 
     // Set w_ik in matrix
-    Vector_2 edge_ik = pi - pk;
-    double len_ik = std::sqrt(edge_ik * edge_ik);
-    CGAL_assertion(len_ik != 0.0); // two points are identical!
-    NT w_ik = w_i_base / len_ik;
+    const NT w_ik = tangent_weight.get_w_p();
     A.add_coef(i, k, w_ik);
 
     // Add to w_ii (w_ii = - sum w_ij)
-    NT w_ii = - w_ij - w_ik;
+    const NT w_ii = - w_ij - w_ik;
     A.add_coef(i, i, w_ii);
   }
 
@@ -507,7 +477,7 @@ private:
   template <typename VertexUVMap,
             typename VertexIndexMap,
             typename VertexParameterizedMap>
-  void fill_linear_system_matrix_mvc_from_mesh_halfedge(const TriangleMesh& mesh,
+  void fill_linear_system_matrix_mvc_from_mesh_halfedge(const Triangle_mesh& mesh,
                                                         halfedge_descriptor hd,
                                                         const VertexUVMap uvmap,
                                                         const VertexIndexMap vimap,
@@ -540,7 +510,7 @@ private:
   template <typename VertexUVMap,
             typename VertexIndexMap,
             typename VertexParameterizedMap>
-  void fill_linear_system_matrix_mvc_from_mesh_face(const TriangleMesh& mesh,
+  void fill_linear_system_matrix_mvc_from_mesh_face(const Triangle_mesh& mesh,
                                                     face_descriptor fd,
                                                     const VertexUVMap uvmap,
                                                     const VertexIndexMap vimap,
@@ -563,7 +533,7 @@ private:
             typename VertexIndexMap,
             typename VertexParameterizedMap>
   Error_code compute_mvc_matrix(const CT& ct,
-                                const TriangleMesh& mesh,
+                                const Triangle_mesh& mesh,
                                 const Faces_vector& faces,
                                 const VertexUVMap uvmap,
                                 const VertexIndexMap vimap,
@@ -661,7 +631,7 @@ private:
             typename VertexUVMap,
             typename VertexIndexMap,
             typename VertexParameterizedMap>
-  Error_code parameterize_convex_hull_with_MVC(const TriangleMesh& mesh,
+  Error_code parameterize_convex_hull_with_MVC(const Triangle_mesh& mesh,
                                                const Vertex_set& vertices,
                                                const Faces_vector& faces,
                                                const CT& ct,
@@ -708,7 +678,7 @@ private:
 public:
   template <typename VertexUVMap,
             typename VertexIndexMap>
-  Error_code parameterize(const TriangleMesh& mesh,
+  Error_code parameterize(const Triangle_mesh& mesh,
                           const Vertex_set& vertices,
                           const Faces_vector& faces,
                           halfedge_descriptor bhd,
@@ -742,15 +712,15 @@ public:
     return OK;
   }
 
-  /// Compute a one-to-one mapping from a triangular 2D surface mesh
+  /// computes a one-to-one mapping from a triangular 2D surface mesh
   /// that is not necessarily embedded to a piece of the 2D space.
   ///
   /// \tparam VertexUVmap must be a model of `ReadWritePropertyMap` with
-  ///         `boost::graph_traits<TriangleMesh>::%vertex_descriptor` as key type and
-  ///         %Point_2 (type deduced from `TriangleMesh` using `Kernel_traits`)
+  ///         `boost::graph_traits<Triangle_mesh>::%vertex_descriptor` as key type and
+  ///         %Point_2 (type deduced from `Triangle_mesh` using `Kernel_traits`)
   ///         as value type.
   /// \tparam VertexIndexMap must be a model of `ReadablePropertyMap` with
-  ///         `boost::graph_traits<TriangleMesh>::%vertex_descriptor` as key type and
+  ///         `boost::graph_traits<Triangle_mesh>::%vertex_descriptor` as key type and
   ///         a unique integer as value type.
   ///
   /// \param mesh a triangulated surface.
@@ -760,7 +730,7 @@ public:
   ///
   template <typename VertexUVMap,
             typename VertexIndexMap>
-  Error_code parameterize(const TriangleMesh& mesh,
+  Error_code parameterize(const Triangle_mesh& mesh,
                           halfedge_descriptor bhd,
                           VertexUVMap uvmap,
                           const VertexIndexMap vimap)

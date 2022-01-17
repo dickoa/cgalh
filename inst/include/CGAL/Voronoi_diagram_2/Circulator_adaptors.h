@@ -3,10 +3,10 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/releases/CGAL-5.0.2/Voronoi_diagram_2/include/CGAL/Voronoi_diagram_2/Circulator_adaptors.h $
-// $Id: Circulator_adaptors.h 254d60f 2019-10-19T15:23:19+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Voronoi_diagram_2/include/CGAL/Voronoi_diagram_2/Circulator_adaptors.h $
+// $Id: Circulator_adaptors.h 2e47630 2021-11-10T09:28:05+01:00 Laurent Rineau
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
-// 
+//
 //
 // Author(s)     : Menelaos Karavelas <mkaravel@iacm.forth.gr>
 
@@ -71,13 +71,13 @@ class Circulator_from_halfedge_adaptor
   typename Base::pointer   operator->() { return &cur_; }
   typename Base::reference operator*() { return cur_; }
 
-  bool operator==(const Circulator& other) const {
-    return cur_ == other.cur_;
+  friend bool operator==(const Circulator& c, const Circulator& other) {
+    return c.cur_ == other.cur_;
 
   }
 
-  bool operator!=(const Circulator& other) const {
-    return cur_ != other.cur_;
+  friend bool operator!=(const Circulator& c, const Circulator& other) {
+    return c.cur_ != other.cur_;
   }
 
  protected:
