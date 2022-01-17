@@ -4,6 +4,7 @@ pages:
   stage: deploy
 
   script:
+    - Rscript -e 'install.packages("pkgdown")'
     - Rscript -e 'devtools::install_deps(dependencies = TRUE)'
     - Rscript -e 'remotes::install_gitlab("dickoa/cgalh")'
     - Rscript -e 'pkgdown::build_site(override = list(destination = "public"))'
