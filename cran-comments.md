@@ -1,7 +1,8 @@
 ## Test environments
 
-* ubuntu 20.04 (on gitlab-ci), R 4.1.2
+* ubuntu 20.04 (on gitlab-ci), R 4.2.1
 * win-builder (devel and release)
+* 	macOS 10.13.6 High Sierra
 
 ## R CMD check results
 
@@ -40,9 +41,8 @@
   bytes for the final component.
   See section ‘Package structure’ in the ‘Writing R Extensions’ manual.
 
-
 ❯ checking installed package size ... NOTE
-    installed size is 41.0Mb
+    installed size is 41.1Mb
     sub-directories of 1Mb or more:
       include  40.9Mb
 

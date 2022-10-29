@@ -6,7 +6,7 @@
 \alias{cgalh-package}
 \title{Provides the 'C++' header-only library of CGAL}
 \description{
-'CGAL' is a C++ library that aims to provide easy access to efficient and reliable algorithms in computational geometry. Since its version 4, 'CGAL' can be used as standalone header-only library and is available under a double GPL-3|LGPL license. <https://www.cgal.org/>.
+'CGAL' is a C++ library that aims to provide easy access to efficient and reliable algorithms in computational geometry. Since its version 4, 'CGAL' can be used as standalone header-only library and is available under a double GPL-3|LGPL license. \url{https://www.cgal.org/}.
 }
 \seealso{
 Useful links:

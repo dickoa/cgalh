@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Arrangement_on_surface_2/include/CGAL/Arr_spherical_gaussian_map_3/Arr_spherical_gaussian_map_3.h $
-// $Id: Arr_spherical_gaussian_map_3.h 6b64dc8 2020-11-11T09:38:55+02:00 Efi Fogel
+// $URL: https://github.com/CGAL/cgal/blob/v5.5.1/Arrangement_on_surface_2/include/CGAL/Arr_spherical_gaussian_map_3/Arr_spherical_gaussian_map_3.h $
+// $Id: Arr_spherical_gaussian_map_3.h 774e353 2022-01-11T11:32:50+02:00 Efi Fogel
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s): Efi Fogel         <efif@post.tau.ac.il>
@@ -134,8 +134,7 @@ public:
                                  OutputIterator oi)
   {
     const Geometry_traits_2* traits = this->m_sgm.geometry_traits();
-    typename Traits::Construct_point_2 ctr_point =
-      traits->construct_point_2_object();
+    auto ctr_point = traits->construct_point_2_object();
     Curve_2 cv =
       traits->construct_curve_2_object()(ctr_point(normal1.direction()),
                                          ctr_point(normal2.direction()));

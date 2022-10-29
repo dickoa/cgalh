@@ -1,7 +1,6 @@
 [![GitLab CI Build
 Status](https://gitlab.com/dickoa/cgalh/badges/master/pipeline.svg)](https://gitlab.com/dickoa/cgalh/pipelines)
 
-
 # cgalh
 
 This package provides an R interface to the header-only C++ [CGAL](https://www.cgal.org) library

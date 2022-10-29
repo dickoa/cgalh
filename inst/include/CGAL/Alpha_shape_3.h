@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Alpha_shapes_3/include/CGAL/Alpha_shape_3.h $
-// $Id: Alpha_shape_3.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.5.1/Alpha_shapes_3/include/CGAL/Alpha_shape_3.h $
+// $Id: Alpha_shape_3.h 115fa5a 2021-12-14T14:01:21+00:00 Andreas Fabri
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 // Author(s)     : Tran Kai Frank DA <Frank.Da@sophia.inria.fr>
@@ -24,9 +24,6 @@
 #include <CGAL/iterator.h>
 #include <CGAL/Object.h>
 #include <CGAL/Unique_hash_map.h>
-#ifdef CGAL_USE_GEOMVIEW
-#include <CGAL/IO/Geomview_stream.h>  // TBC
-#endif
 #include <CGAL/Triangulation_utils_3.h>
 
 #include <boost/type_traits/is_same.hpp>
@@ -786,11 +783,6 @@ private:
 
   //---------------------------------------------------------------------
 public:
-#ifdef CGAL_USE_GEOMVIEW
-  void show_triangulation_edges(Geomview_stream &gv) const;
-  void show_alpha_shape_faces(Geomview_stream &gv) const;
-#endif
-
 
   // to Debug
   void print_maps() const;
@@ -1950,8 +1942,5 @@ Alpha_shape_3<Dt,EACT>::print_alpha_status(const Alpha_status& as) const
 
 } //namespace CGAL
 
-#ifdef CGAL_USE_GEOMVIEW
-#include <CGAL/IO/alpha_shape_geomview_ostream_3.h>
-#endif
 
 #endif //CGAL_ALPHA_SHAPE_3_H

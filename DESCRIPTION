@@ -1,7 +1,7 @@
 Package: cgalh
 Title: 'CGAL' C++ Header Files
-Version: 0.0.0.9000
-Date: 2022-01-30
+Version: 5.5.1
+Date: 2022-10-31
 Author: file inst/AUTHORS
 Maintainer: Ahmadou Dicko <mail@ahmadoudicko.com>
 Description: 'CGAL' is a C++ library that aims to provide easy access to efficient and
@@ -15,4 +15,4 @@ BugReports: https://gitlab.com/dickoa/cgalh/issues
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

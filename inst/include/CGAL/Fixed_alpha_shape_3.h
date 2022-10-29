@@ -3,8 +3,8 @@
 //
 // This file is part of CGAL (www.cgal.org).
 //
-// $URL: https://github.com/CGAL/cgal/blob/v5.4-beta1/Alpha_shapes_3/include/CGAL/Fixed_alpha_shape_3.h $
-// $Id: Fixed_alpha_shape_3.h 98e4718 2021-08-26T11:33:39+02:00 Sébastien Loriot
+// $URL: https://github.com/CGAL/cgal/blob/v5.5.1/Alpha_shapes_3/include/CGAL/Fixed_alpha_shape_3.h $
+// $Id: Fixed_alpha_shape_3.h 115fa5a 2021-12-14T14:01:21+00:00 Andreas Fabri
 // SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-Commercial
 //
 //
@@ -32,9 +32,6 @@
 #include <CGAL/Triangulation_utils_3.h>
 #include <CGAL/Unique_hash_map.h>
 #include <CGAL/iterator.h>
-#ifdef CGAL_USE_GEOMVIEW
-#include <CGAL/IO/Geomview_stream.h>  // TBC
-#endif
 
 #include <CGAL/Alpha_shapes_3/internal/Classification_type.h>
 
@@ -727,10 +724,6 @@ private:
 
   //---------------------------------------------------------------------
 public:
-#ifdef CGAL_USE_GEOMVIEW
-  void show_alpha_shape_faces(Geomview_stream &gv) const;
-#endif
-
 
   //Iterators
 
