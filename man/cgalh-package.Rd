@@ -12,7 +12,7 @@
 Useful links:
 \itemize{
   \item \url{https://gitlab.com/dickoa/cgalh}
-  \item Report bugs at \url{https://gitlab.com/dickoa/cgalh/issues}
+  \item Report bugs at \url{https://gitlab.com/dickoa/cgalh/-/issues}
 }
 
 }

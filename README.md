@@ -1,5 +1,5 @@
 [![GitLab CI Build
-Status](https://gitlab.com/dickoa/cgalh/badges/master/pipeline.svg)](https://gitlab.com/dickoa/cgalh/pipelines)
+Status](https://gitlab.com/dickoa/cgalh/badges/master/pipeline.svg)](https://gitlab.com/dickoa/cgalh/-/pipelines)
 
 # cgalh
 
