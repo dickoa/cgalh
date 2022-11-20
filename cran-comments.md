@@ -1,8 +1,8 @@
 ## Test environments
 
-* ubuntu 20.04 (on gitlab-ci), R 4.2.1
+* ubuntu 20.04 (on gitlab-ci), R 4.2.2
 * win-builder (devel and release)
-* 	macOS 10.13.6 High Sierra
+* macOS 10.13.6 High Sierra
 
 ## R CMD check results
 
